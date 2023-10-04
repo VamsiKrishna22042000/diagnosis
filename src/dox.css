@@ -1,0 +1,164 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap");
+
+body {
+  font-family: "Roboto", sans-serif;
+  background-color: #ffffff;
+  color: #787a91;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: auto;
+  width: 100vw;
+}
+
+.form-container {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  height: 100%;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.form-column {
+  flex: 1;
+  margin-right: 10px;
+}
+
+h1 {
+  text-align: left;
+  color: #141e61;
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+h2 {
+  font-size: 1.2rem;
+  margin-top: 1rem;
+  text-align: left;
+  font-weight: bold;
+  color: #141e61;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  font-family: 1.2rem;
+}
+
+select,
+input[type="text"],
+input[type="radio"] {
+  width: 80%;
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #787a91;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+button.next-button {
+  display: block;
+  margin: 20px auto;
+  background-color: #141e61;
+  color: #ffffff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button.next-button:hover {
+  background-color: #0f044c;
+}
+
+.export-content {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  width: 80%;
+  max-width: 800px;
+  margin-top: 2%;
+  margin-bottom: 2%;
+  text-align: left;
+}
+
+.export-content button {
+  display: block;
+  background-color: #141e61;
+  color: #ffffff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Add styles for the selected data table */
+.selected-data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.selected-data-table th,
+.selected-data-table td {
+  border: 1px solid #787a91;
+  padding: 8px;
+  text-align: left;
+}
+
+.selected-data-table th {
+  background-color: #141e61;
+  color: #ffffff;
+}
+/* Add styles for the selected data list */
+.selected-data-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.selected-data-list > li {
+  margin-bottom: 20px;
+  font-family: "Roboto", sans-serif;
+  font-weight: 500;
+}
+
+.selected-data-list h2 {
+  font-size: 1.2rem;
+  margin-top: 1rem;
+}
+
+.selected-data-list ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.selected-data-list li {
+  margin-bottom: 10px;
+  font-family: "Roboto", sans-serif;
+  font-weight: 100;
+}
+
+.selected-data-list strong {
+  font-family: "Roboto", sans-serif;
+  font-weight: 500;
+}

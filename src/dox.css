@@ -162,3 +162,47 @@ button.next-button:hover {
   font-family: "Roboto", sans-serif;
   font-weight: 500;
 }
+
+.clock-postion {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.clock-box {
+  height: 3.2rem;
+  width: 15%;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-around;
+}
+
+.clocks {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.applicable-box {
+  height: 3rem;
+  display: flex;
+  width: 80%;
+  justify-content: space-around;
+}
+
+.applicable-box div {
+  font-size: 0.9rem;
+  display: flex;
+  width: 40%;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.applicable-box label {
+  width: 100%;
+  align-self: flex-start;
+}

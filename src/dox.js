@@ -58,8 +58,8 @@ const Dox = () => {
     height: "",
   });
 
-  const [tumorFocality, setTumorFocality] = useState("single");
-  const [numFoci, setNumFoci] = useState("exact");
+  const [tumorFocality, setTumorFocality] = useState("");
+  const [numFoci, setNumFoci] = useState("");
   const [specificNumber, setSpecificNumber] = useState("");
 
   const [dcisPresence, setDcisPresence] = useState(""); // State for DCIS presence
@@ -108,7 +108,7 @@ const Dox = () => {
   const [extranodalExtension, setExtranodalExtension] = useState(""); // State for Extranodal Extension
   const [extranodalExtensionSize, setExtranodalExtensionSize] = useState(""); // State for Extranodal Extension Size
 
-  const [distantSite, setDistantSite] = useState("NA"); // State for Distant Site
+  const [distantSite, setDistantSite] = useState(""); // State for Distant Site
   const [distantSiteOptions, setDistantSiteOptions] = useState({
     Lung: false,
     Liver: false,
@@ -1083,6 +1083,7 @@ const Dox = () => {
                   onChange={handleDistantSiteChange}
                   required
                 >
+                  <option value="">Select</option>
                   <option value="NA">NA</option>
                   <option value="Present">Present</option>
                 </select>

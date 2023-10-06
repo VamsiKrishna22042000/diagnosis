@@ -58,6 +58,73 @@ const Dox = () => {
     height: "",
   });
 
+  const [tumorFocality, setTumorFocality] = useState("single");
+  const [numFoci, setNumFoci] = useState("exact");
+  const [specificNumber, setSpecificNumber] = useState("");
+
+  const [dcisPresence, setDcisPresence] = useState(""); // State for DCIS presence
+  const [dcisSize, setDcisSize] = useState({ x: "", y: "" }); // State for DCIS size
+  const [architecturalPattern, setArchitecturalPattern] = useState(""); // State for architectural pattern
+  const [architecturalPatternOther, setArchitecturalPatternOther] =
+    useState(""); // State for other architectural pattern
+  const [nuclearGrade, setNuclearGrade] = useState(""); // State for nuclear grade
+  const [necrosis, setNecrosis] = useState(""); // State for necrosis
+  const [numBlocksDCIS, setNumBlocksDCIS] = useState(""); // State for number of blocks with DCIS
+  const [numBlocksExamined, setNumBlocksExamined] = useState(""); // State for number of blocks examined
+
+  const [lcisPresence, setLcisPresence] = useState(""); // State for LCIS presence
+
+  const [tumorExtent, setTumorExtent] = useState(""); // State for Tumor Extent
+  const [skinInvolvement, setSkinInvolvement] = useState(""); // State for Skin Involvement
+  const [skeletalMuscleInvolvement, setSkeletalMuscleInvolvement] =
+    useState(""); // State for Skeletal Muscle Involvement
+
+  const [lymphovascularInvasion, setLymphovascularInvasion] = useState(""); // State for Lymphovascular Invasion
+  const [lymphovascularInvasionExtent, setLymphovascularInvasionExtent] =
+    useState(""); // State for Lymphovascular Invasion Extent
+
+  const [microcalcifications, setMicrocalcifications] = useState(""); // State for Microcalcifications
+  const [otherMicrocalcifications, setOtherMicrocalcifications] = useState(""); // State for Other Microcalcifications
+
+  const [breastTreatmentEffect, setBreastTreatmentEffect] = useState(""); // State for Treatment Effect in the Breast
+  const [lymphNodeTreatmentEffect, setLymphNodeTreatmentEffect] = useState(""); // State for Treatment Effect in the Lymph Nodes
+
+  const [invasiveCarcinomaMarginStatus, setInvasiveCarcinomaMarginStatus] =
+    useState(""); // State for Margin Status for Invasive Carcinoma
+  const [involvedMargin, setInvolvedMargin] = useState(""); // State for Specifying Involved Margin
+  const [distanceFromMargin, setDistanceFromMargin] = useState(""); // State for Distance of Invasive Carcinoma from deep resected margin
+
+  const [dcisStatus, setDcisStatus] = useState(""); // State for Margin Status for DCIS
+  const [dcisInvolvedMargin, setDcisInvolvedMargin] = useState(""); // State for Specifying Involved Margin for DCIS
+
+  const [totalLymphNodesExamined, setTotalLymphNodesExamined] = useState(""); // State for Total Number of Lymph Nodes Examined
+  const [totalSentinelNodesExamined, setTotalSentinelNodesExamined] =
+    useState(""); // State for Total Number of Sentinel Nodes Examined
+
+  const [lymphNodesInvolved, setLymphNodesInvolved] = useState(""); // State for Total Number of Lymph Nodes Involved
+  const [selectedMetastasisType, setSelectedMetastasisType] = useState(""); // State for selected metastasis type
+  const [largestMetastaticDepositSize, setLargestMetastaticDepositSize] =
+    useState(""); // State for Size of Largest Nodal Metastatic Deposit
+  const [extranodalExtension, setExtranodalExtension] = useState(""); // State for Extranodal Extension
+  const [extranodalExtensionSize, setExtranodalExtensionSize] = useState(""); // State for Extranodal Extension Size
+
+  const [distantSite, setDistantSite] = useState("NA"); // State for Distant Site
+  const [distantSiteOptions, setDistantSiteOptions] = useState({
+    Lung: false,
+    Liver: false,
+    Bone: false,
+    Brain: false,
+    Other: false,
+  }); // State for individual distant site options
+  const [otherDistantSiteInput, setOtherDistantSiteInput] = useState(""); // State for Other Distant Site input
+
+  const [pT, setPT] = useState(""); // State for pT
+  const [pN, setPN] = useState(""); // State for pN
+  const [pM, setPM] = useState(""); // State for pM
+
+  const [additionalFindings, setAdditionalFindings] = useState(""); // State for Additional Findings
+  const [result, setResult] = useState(""); // State for Result
+
   const handleProcedureChange = (e) => {
     const selectedProcedure = e.target.value;
     setSpecimenProcedure(selectedProcedure);
@@ -99,125 +166,75 @@ const Dox = () => {
   };
 
   const handleNextPageClick = () => {
-    if (specimenProcedure === "") {
-      alert("Select Procedure");
-    } else if (specimenProcedure === "Other" && otherProcedure === "") {
-      alert("Enter Other Procedure");
-    } else if (specimenLaterality === "") {
-      alert("Select Specimen Laterality");
-    } else if (tumorSite === "") {
-      alert("Select Tumor Site");
-    } else if (tumorSite !== "" && tumorSite === "Clock position") {
-      clockPositions.length <= 0 && alert("Select Clock Positions");
-    }
+    setMoveToSecondPage(true);
+  };
 
-    if (
-      tumorSite !== "" &&
-      tumorSite === "Distance from Nipple Areola Complex"
-    ) {
-      distanceFromNipple === "" &&
-        alert("Enter Distance from Nipple Areola Complex");
-    }
+  const handleTumorFocalityChange = (e) => {
+    setTumorFocality(e.target.value);
+  };
 
-    if (tumorSite !== "" && selectedOption === "") {
-      if (tumorSite === "Clock position") {
-        if (clockPositions.length > 0) {
-          alert("Select Tumor Size");
-        }
-      } else if (tumorSite === "Distance from Nipple Areola Complex") {
-        if (distanceFromNipple !== "") {
-          alert("Select Tumor Size");
-        }
-      } else {
-        alert("Select Tumor Size");
-      }
-    } else if (selectedOption !== "" && selectedOption === "Other") {
-      customSize.length === ""
-        ? alert("Enter Length")
-        : customSize.width === ""
-        ? alert("Enter Width")
-        : customSize.height === "" && alert("Enter Height");
-    }
+  const handleNumFociChange = (e) => {
+    setNumFoci(e.target.value);
+  };
 
-    if (selectedOption !== "" && histologicType === "") {
-      if (selectedOption === "Other") {
-        if (
-          customSize.length !== "" &&
-          customSize.height !== "" &&
-          customSize.width !== ""
-        ) {
-          alert("Select HistologicType");
-        }
-      } else if (selectedOption !== "Other") {
-        alert("Select HistologicType");
-      }
-    } else if (histologicType !== "" && histologicType === "Other") {
-      otherHistologicType === "" && alert("Enter Other Histologic Type");
-    }
+  const handleSpecificNumberChange = (e) => {
+    setSpecificNumber(e.target.value);
+  };
 
-    if (histologicType !== "" && histologicGrade === "") {
-      if (histologicType === "Other") {
-        if (otherHistologicType !== "") {
-          alert("Select Histologic Grade");
-        }
-      } else if (histologicType !== "Other") {
-        alert("Select Histologic Grade");
-      }
-    } else if (histologicGrade !== "" && histologicGrade === "Applicable") {
-      glandularDifferentiation === ""
-        ? alert("Select Glandular / Tubular Differentiation")
-        : nuclearPleomorphism === ""
-        ? alert("Select Nuclear Pleomorphism")
-        : mitoticRate === ""
-        ? alert("Select MitoticRate")
-        : overallGrade === "" && alert("Select Overall Grade");
-    }
-    if (histologicGrade !== "") {
-      if (histologicGrade === "Applicable") {
-        if (
-          glandularDifferentiation !== "" &&
-          nuclearPleomorphism !== "" &&
-          mitoticRate !== "" &&
-          overallGrade !== ""
-        ) {
-          setMoveToSecondPage(true);
-        }
-      } else if (histologicType === "Not  applicble") {
-        setMoveToSecondPage(true);
-      }
-    }
+  const handleMetastasisTypeChange = (e) => {
+    setSelectedMetastasisType(e.target.value);
+  };
+
+  const handleExtranodalExtensionChange = (e) => {
+    setExtranodalExtension(e.target.value);
+  };
+
+  const handleDistantSiteChange = (e) => {
+    setDistantSite(e.target.value);
+  };
+
+  const handleDistantSiteOptionChange = (option) => {
+    const updatedOptions = { ...distantSiteOptions };
+    updatedOptions[option] = !updatedOptions[option];
+    setDistantSiteOptions(updatedOptions);
+  };
+
+  const handleOtherDistantSiteInputChange = (e) => {
+    setOtherDistantSiteInput(e.target.value);
   };
 
   const selectedData = (
-    <div style={{ marginTop: "2rem" }}>
-      <h1>Report</h1>
+    <div>
+      <h1>Final Report</h1>
       <ul className="selected-data-list">
         <li>
           <h2>SPECIMEN</h2>
           <ul>
             {specimenProcedure && (
               <li>
-                <strong>Procedure:</strong> {specimenProcedure}
+                <strong>Procedure :</strong>{" "}
+                <span>
+                  {specimenProcedure === "Other"
+                    ? otherProcedure
+                    : specimenProcedure}
+                </span>
               </li>
             )}
-            {specimenProcedure === "Other" && otherProcedure && (
-              <li>
-                <strong>Other Procedure:</strong> {otherProcedure}
-              </li>
-            )}
+
             {specimenLaterality && (
               <li>
-                <strong>Specimen Laterality:</strong> {specimenLaterality}
+                <strong>Specimen Laterality :</strong> {specimenLaterality}
               </li>
             )}
           </ul>
         </li>
         <li>
           <h2>TUMOR</h2>
+
           <ul>
             {tumorSite && (
               <li>
-                <strong>Tumor Site:</strong> {tumorSite}
+                <strong>Tumor Site :</strong> {tumorSite}
               </li>
             )}
             {tumorSite === "Clock position" && clockPositions.length > 0 && (
@@ -236,9 +253,21 @@ const Dox = () => {
             <li>
               <strong>Tumor Size :</strong>
               {selectedOption === "Other"
-                ? `${customSize.length} x ${customSize.width} x ${customSize.height}`
-                : selectedOption}
-            </li>{" "}
+                ? ` Length :${customSize.length} x Width: ${customSize.width} x Height : ${customSize.height} cm`
+                : ` ${selectedOption}`}
+            </li>
+          </ul>
+          <ul>
+            <li>
+              <strong>Tumor Focality (Note F) : </strong>
+              <span>
+                {tumorFocality === "Multiple foci of invasive carcinoma"
+                  ? numFoci === "Specfic Number"
+                    ? `Multiple foci of invasive carcinoma - ${numFoci}`
+                    : `Multiple foci of invasive carcinoma - ${numFoci} - ${specificNumber}`
+                  : "Single focus of invasive carcinoma"}
+              </span>
+            </li>
           </ul>
         </li>
         <li>
@@ -259,13 +288,15 @@ const Dox = () => {
           <ul>
             {histologicGrade && (
               <li>
-                <strong>Selected Grade:</strong> {histologicGrade}
+                <strong>Selected Grade :</strong> {histologicGrade}
               </li>
             )}
             {histologicGrade === "Applicable" && (
               <>
                 <li>
-                  <strong>Glandular (Acinar) / Tubular Differentiation:</strong>{" "}
+                  <strong>
+                    Glandular (Acinar) / Tubular Differentiation :
+                  </strong>{" "}
                   {glandularDifferentiation}
                 </li>
                 <li>
@@ -281,6 +312,234 @@ const Dox = () => {
             )}
           </ul>
         </li>
+        <li>
+          <h2>Ductal Carcinoma In Situ (DCIS)</h2>
+          <ul>
+            <strong>DCIS Presence : </strong> {dcisPresence}
+          </ul>
+          {dcisPresence === "Present" && (
+            <ul>
+              <strong>Size of DCIS : </strong>{" "}
+              {`${dcisSize.x} - ${dcisSize.y} mm`}
+            </ul>
+          )}
+          {dcisPresence === "Present" && (
+            <ul>
+              <strong>Architectural Patterns : </strong>{" "}
+              {architecturalPattern === "Other"
+                ? architecturalPatternOther
+                : architecturalPattern}
+            </ul>
+          )}
+          {dcisPresence === "Present" && (
+            <ul>
+              <strong>Nuclear Grade : </strong> {nuclearGrade}
+            </ul>
+          )}
+          {dcisPresence === "Present" && (
+            <ul>
+              <strong>Necrosis : </strong> {necrosis}
+            </ul>
+          )}
+          {dcisPresence === "Present" && (
+            <ul>
+              <strong>Number of Blocks with DCIS : </strong> {numBlocksDCIS}
+            </ul>
+          )}
+          {dcisPresence === "Present" && (
+            <ul>
+              <strong>Number of Blocks Examined : </strong> {numBlocksExamined}
+            </ul>
+          )}
+        </li>
+        <li>
+          <h2>Lobular Carcinoma In Situ (LCIS)</h2>
+          <ul>
+            <li>
+              <strong>LCIS Presence : </strong> {lcisPresence}
+            </li>
+          </ul>
+        </li>
+        <li>
+          <h2>Tumor Extent</h2>
+          <ul>
+            <li>
+              <strong>Tumor Extent : </strong> {tumorExtent}
+              <li>
+                {tumorExtent === "Skin is present and involved" && (
+                  <>
+                    {" "}
+                    <strong>Skin is present and involved : </strong>
+                    {skinInvolvement}
+                  </>
+                )}
+              </li>
+              <li>
+                {tumorExtent === "Skeletal muscle is present and involved" && (
+                  <>
+                    <strong>Skeletal muscle is present and involved : </strong>
+                    {skeletalMuscleInvolvement}
+                  </>
+                )}
+              </li>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <h2>Lymphovascular Invasion</h2>
+          <ul>
+            <strong>Lymphovascular Invasion : </strong>{" "}
+            {lymphovascularInvasion === "Present"
+              ? lymphovascularInvasionExtent
+              : lymphovascularInvasion}
+          </ul>
+        </li>
+        <li>
+          <h2>Microcalcifications</h2>
+          <ul>
+            <strong>Microcalcifications : </strong>{" "}
+            {microcalcifications === "Other"
+              ? otherMicrocalcifications
+              : microcalcifications}
+          </ul>
+        </li>
+        {breastTreatmentEffect !== "NA" && (
+          <li>
+            <h2>Treatment Effect in the Breast : </h2>
+            <ul>
+              <strong>Treatment Effect in the Breast : </strong>{" "}
+              {breastTreatmentEffect}
+            </ul>
+          </li>
+        )}
+        {lymphNodeTreatmentEffect !== "NA" && (
+          <li>
+            <h2>Treatment Effect in the Lymph Nodes : </h2>
+            <ul>
+              <strong>Treatment Effect in the Lymph Nodes : </strong>{" "}
+              {lymphNodeTreatmentEffect}
+            </ul>
+          </li>
+        )}
+        <li>
+          <h2>Margins</h2>
+          <ul>
+            <strong>Margin Status for Invasive Carcinoma : </strong>{" "}
+            {invasiveCarcinomaMarginStatus}
+          </ul>
+          {invasiveCarcinomaMarginStatus ===
+            "Margin involved by invasive carcinoma." && (
+            <>
+              <strong>Specify Involved Margin : </strong> {involvedMargin}
+            </>
+          )}
+          {invasiveCarcinomaMarginStatus ===
+            "Distance of Invasive Carcinoma from deep resected margin" && (
+            <>
+              <strong>{invasiveCarcinomaMarginStatus} : </strong>{" "}
+              {distanceFromMargin}
+            </>
+          )}
+          {dcisPresence === "Present" && (
+            <>
+              <strong>Margin Status for DCIS :</strong>{" "}
+              {dcisStatus === "Margin Involved by DCIS"
+                ? `Specify Involved Margin - ${dcisInvolvedMargin}`
+                : dcisStatus}
+            </>
+          )}
+        </li>
+        <li>
+          <h2>REGIONAL LYMPH NODES</h2>
+          <ul>
+            {" "}
+            <strong>
+              Total Number of Lymph Nodes Examined (sentinel and non-sentinel) :{" "}
+            </strong>{" "}
+            {totalLymphNodesExamined}
+          </ul>
+          <ul>
+            {" "}
+            <strong>Total Number of Sentinel Nodes Examined : </strong>{" "}
+            {totalSentinelNodesExamined}
+          </ul>
+          <strong>Lymphnodes Involved : </strong>{" "}
+          {lymphNodesInvolved === "Yes" ? (
+            <>
+              {lymphNodesInvolved}
+              <br />
+              <strong>Select Metastasis Type - </strong>{" "}
+              {selectedMetastasisType}
+            </>
+          ) : (
+            lymphNodesInvolved
+          )}
+          {selectedMetastasisType ===
+          "Size of Largest Nodal Metastatic Deposit" ? (
+            <> - {largestMetastaticDepositSize} mm</>
+          ) : (
+            selectedMetastasisType === "Extranodal Extension" && (
+              <>
+                {extranodalExtension === "Present" ? (
+                  <>
+                    {" "}
+                    - {extranodalExtension} - {extranodalExtensionSize}{" "}
+                  </>
+                ) : (
+                  <> - {extranodalExtension}</>
+                )}
+              </>
+            )
+          )}
+        </li>
+        {distantSite !== "NA" && (
+          <li>
+            <h2>DISTANT METASTASIS</h2>
+            <ul>
+              <strong>Distant Site : </strong>{" "}
+              <>
+                {distantSite !== "NA" && (
+                  <>
+                    {" "}
+                    - {distantSite} - {distantSiteOptions.Lung && "Lung ,"}{" "}
+                    {distantSiteOptions.Liver && "Liver ,"}{" "}
+                    {distantSiteOptions.Bone && "Bone , "}{" "}
+                    {distantSiteOptions.Brain && "Brain ,"}{" "}
+                    {distantSiteOptions.Other && (
+                      <>- Other Distant Site : {otherDistantSiteInput}</>
+                    )}{" "}
+                  </>
+                )}
+              </>
+            </ul>
+          </li>
+        )}
+        <li>
+          <h2>pTNM CLASSIFICATION</h2>
+          <ul>
+            <strong>pT :</strong> - {pT}
+          </ul>
+          <ul>
+            <strong>pN :</strong> - {pN}
+          </ul>
+          <ul>
+            <strong>pM :</strong> - {pM}
+          </ul>
+        </li>
+        <li>
+          <h2>Additional Findings</h2>
+          <br />
+          <>
+            <strong>AdditionalFindings : </strong> {additionalFindings}
+          </>
+        </li>
+        <li>
+          <h2>Result</h2>
+          <br />
+          <>
+            <strong>Result : </strong> {result}
+          </>
+        </li>
       </ul>
     </div>
   );
@@ -293,15 +552,8 @@ const Dox = () => {
         <>
           <div id="exportContent" className="export-content">
             {selectedData}
-          </div>{" "}
-          <div
-            style={{
-              width: "80%",
-              display: "flex",
-              justifyContent: "space-between",
-              marginBottom: "5%",
-            }}
-          >
+          </div>
+          <div className="buttons-export">
             <button
               className="next-button"
               onClick={() => setMoveToSecondPage(false)}
@@ -429,7 +681,7 @@ const Dox = () => {
                   )}
                 </div>
               </div>
-              <div>
+              <div className="tumorsize">
                 <label>
                   Tumor Size:
                   <select value={selectedOption} onChange={handleOptionChange}>
@@ -444,7 +696,7 @@ const Dox = () => {
                   </select>
                 </label>
                 {selectedOption === "Other" && (
-                  <div>
+                  <lable>
                     <input
                       type="text"
                       name="length"
@@ -466,12 +718,437 @@ const Dox = () => {
                       value={customSize.height}
                       onChange={handleCustomSizeChange}
                     />
+                  </lable>
+                )}
+              </div>
+              <div className="tumorfoci">
+                <label>
+                  Tumor Focality (Note F):
+                  <select
+                    id="tumorFocality"
+                    value={tumorFocality}
+                    onChange={handleTumorFocalityChange}
+                  >
+                    <option value="">Select</option>
+                    <option value="Single focus of invasive carcinoma">
+                      Single focus of invasive carcinoma
+                    </option>
+                    <option value="Multiple foci of invasive carcinoma">
+                      Multiple foci of invasive carcinoma
+                    </option>
+                  </select>
+                </label>
+                {tumorFocality === "Multiple foci of invasive carcinoma" && (
+                  <lable className="foci">
+                    <label htmlFor="numFoci">Specify the number of Foci:</label>
+                    <select
+                      id="numFoci"
+                      value={numFoci}
+                      onChange={handleNumFociChange}
+                    >
+                      <option value="">Select</option>
+                      <option value="Exact number cannot be determined">
+                        Exact number cannot be determined
+                      </option>
+                      <option value="Specific number">Specific number</option>
+                    </select>
+                  </lable>
+                )}
+                {numFoci === "Specific number" &&
+                  tumorFocality === "Multiple foci of invasive carcinoma" && (
+                    <lable className="foci">
+                      <label htmlFor="specificNumberInput">
+                        Enter the specific number:
+                      </label>
+                      <input
+                        type="text"
+                        id="specificNumberInput"
+                        value={specificNumber}
+                        onChange={handleSpecificNumberChange}
+                        min="1"
+                        name="specificNumberInput"
+                        placeholder="Enter Specific Number"
+                      />
+                    </lable>
+                  )}
+              </div>
+              <div className="tumorExtent">
+                <h2>Tumor Extent</h2>
+                <label>Tumor Extent:</label>
+                <select
+                  value={tumorExtent}
+                  onChange={(e) => setTumorExtent(e.target.value)}
+                  required
+                >
+                  <option value="">Select</option>
+                  <option value="Not applicable (skin, nipple, and skeletal muscle are absent)">
+                    Not applicable (skin, nipple, and skeletal muscle are
+                    absent)
+                  </option>
+                  <option value="Not applicable (skin, nipple, and skeletal muscle are uninvolved)">
+                    Not applicable (skin, nipple, and skeletal muscle are
+                    uninvolved)
+                  </option>
+                  <option value="Skin is present and involved">
+                    Skin is present and involved
+                  </option>
+                  <option value="DCIS involves nipple epidermis (Paget disease of the nipple)#">
+                    DCIS involves nipple epidermis (Paget disease of the
+                    nipple)#
+                  </option>
+                  <option value="Skeletal muscle is present and involved">
+                    Skeletal muscle is present and involved
+                  </option>
+                </select>
+
+                {tumorExtent === "Skin is present and involved" && (
+                  <div className="tumorExtent">
+                    <label>Skin Involvement:</label>
+                    <select
+                      value={skinInvolvement}
+                      onChange={(e) => setSkinInvolvement(e.target.value)}
+                      required
+                    >
+                      <option value="">Select</option>
+                      <option value="Carcinoma directly invades into the dermis or epidermis without skin ulceration">
+                        Carcinoma directly invades into the dermis or epidermis
+                        without skin ulceration
+                      </option>
+                      <option value="Carcinoma directly invades into the dermis or epidermis with skin ulceration (T4b)">
+                        Carcinoma directly invades into the dermis or epidermis
+                        with skin ulceration (T4b)
+                      </option>
+                      <option value="Carcinoma does not directly invade into the dermis or epidermis">
+                        Carcinoma does not directly invade into the dermis or
+                        epidermis
+                      </option>
+                      <option value="Satellite skin foci of invasive carcinoma are present (i.e., not contiguous with the invasive carcinoma in the breast) (classified as T4b)">
+                        Satellite skin foci of invasive carcinoma are present
+                        (i.e., not contiguous with the invasive carcinoma in the
+                        breast) (classified as T4b)
+                      </option>
+                    </select>
+                  </div>
+                )}
+
+                {tumorExtent === "Skeletal muscle is present and involved" && (
+                  <div className="tumorExtent">
+                    <label>Skeletal Muscle Involvement:</label>
+                    <select
+                      value={skeletalMuscleInvolvement}
+                      onChange={(e) =>
+                        setSkeletalMuscleInvolvement(e.target.value)
+                      }
+                      required
+                    >
+                      <option value="">Select</option>
+                      <option value="Carcinoma invades skeletal muscle">
+                        Carcinoma invades skeletal muscle
+                      </option>
+                      <option value="Carcinoma invades into skeletal muscle and into the chest wall (classified as T4a)">
+                        Carcinoma invades into skeletal muscle and into the
+                        chest wall (classified as T4a)
+                      </option>
+                    </select>
+                  </div>
+                )}
+              </div>
+              <div className="tumorExtent">
+                <h2>Lymphovascular Invasion</h2>
+                <label>Lymphovascular Invasion:</label>
+                <select
+                  value={lymphovascularInvasion}
+                  onChange={(e) => setLymphovascularInvasion(e.target.value)}
+                  required
+                >
+                  <option value="">Select</option>
+                  <option value="Not identified">Not identified</option>
+                  <option value="Present">Present</option>
+                  <option value="Cannot be determined">
+                    Cannot be determined
+                  </option>
+                </select>
+
+                {lymphovascularInvasion === "Present" && (
+                  <div className="tumorExtent">
+                    <label>LVI Extent:</label>
+                    <select
+                      value={lymphovascularInvasionExtent}
+                      onChange={(e) =>
+                        setLymphovascularInvasionExtent(e.target.value)
+                      }
+                      required
+                    >
+                      <option value="">Select</option>
+                      <option value="Focal (LVI in one block only)">
+                        Focal (LVI in one block only)
+                      </option>
+                      <option value="Extensive (LVI in two or more blocks)">
+                        Extensive (LVI in two or more blocks)
+                      </option>
+                    </select>
+                  </div>
+                )}
+              </div>
+              <div className="tumorExtent">
+                <h2>Treatment Effect in the Breast</h2>
+                <label>Treatment Effect in the Breast :</label>
+                <select
+                  value={breastTreatmentEffect}
+                  onChange={(e) => setBreastTreatmentEffect(e.target.value)}
+                  required
+                >
+                  <option value="">Select</option>
+                  <option value="NA">NA</option>
+                  <option value="No known presurgical therapy">
+                    No known presurgical therapy
+                  </option>
+                  <option value="No definite response to presurgical therapy in the invasive carcinoma">
+                    No definite response to presurgical therapy in the invasive
+                    carcinoma
+                  </option>
+                  <option value="Probable or definite response to presurgical therapy in the invasive carcinoma">
+                    Probable or definite response to presurgical therapy in the
+                    invasive carcinoma
+                  </option>
+                  <option value="No residual invasive carcinoma is present in the breast after presurgical therapy">
+                    No residual invasive carcinoma is present in the breast
+                    after presurgical therapy
+                  </option>
+                </select>
+
+                <h2>Treatment Effect in the Lymph Nodes</h2>
+                <label>Treatment Effect in the Lymph Nodes:</label>
+                <select
+                  value={lymphNodeTreatmentEffect}
+                  onChange={(e) => setLymphNodeTreatmentEffect(e.target.value)}
+                  required
+                >
+                  <option value="">Select</option>
+                  <option value="NA">NA</option>
+                  <option value="No definite response to presurgical therapy in metastatic carcinoma">
+                    No definite response to presurgical therapy in metastatic
+                    carcinoma
+                  </option>
+                  <option value="Probable or definite response to presurgical therapy in metastatic carcinoma">
+                    Probable or definite response to presurgical therapy in
+                    metastatic carcinoma
+                  </option>
+                  <option value="No lymph node metastases. Fibrous scarring or histiocytic aggregates, possibly related to prior lymph node metastases with pathologic complete response">
+                    No lymph node metastases. Fibrous scarring or histiocytic
+                    aggregates, possibly related to prior lymph node metastases
+                    with pathologic complete response
+                  </option>
+                  <option value="No lymph node metastases and no fibrous scarring or histiocytic aggregates in the nodes">
+                    No lymph node metastases and no fibrous scarring or
+                    histiocytic aggregates in the nodes
+                  </option>
+                </select>
+              </div>
+              <div className="tumorExtent">
+                <h2>REGIONAL LYMPH NODES</h2>
+                <label>
+                  Total Number of Lymph Nodes Examined (sentinel and
+                  non-sentinel):
+                </label>
+                <input
+                  type="text"
+                  value={totalLymphNodesExamined}
+                  onChange={(e) => setTotalLymphNodesExamined(e.target.value)}
+                  required
+                />
+
+                <label>Total Number of Sentinel Nodes Examined:</label>
+                <input
+                  type="text"
+                  value={totalSentinelNodesExamined}
+                  onChange={(e) =>
+                    setTotalSentinelNodesExamined(e.target.value)
+                  }
+                  required
+                />
+              </div>
+              <div className="tumorExtent">
+                <label>Lymphnodes Involved</label>
+                <select
+                  value={lymphNodesInvolved}
+                  onChange={(e) => setLymphNodesInvolved(e.target.value)}
+                  required
+                >
+                  <option value="">Select</option>
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                </select>
+
+                {lymphNodesInvolved === "Yes" && (
+                  <div className="tumorExtent">
+                    <label>Select Metastasis Type:</label>
+                    <select
+                      value={selectedMetastasisType}
+                      onChange={handleMetastasisTypeChange}
+                      required
+                    >
+                      <option value="">Select</option>
+                      <option value="Number of Lymph Nodes with Macro metastases (greater than 2 mm)">
+                        Number of Lymph Nodes with Macro metastases (greater
+                        than 2 mm)
+                      </option>
+                      <option value="Number of Lymph Nodes with Micro metastases (> 0.2 - 2 mm or > 200 cells)">
+                        Number of Lymph Nodes with Micro metastases &#62; 2 0.2
+                        - 2 mm or &#62; 200 cells
+                      </option>
+                      <option value="Number of Lymph Nodes with Isolated Tumor Cells (<0.2 mm OR 200 cells or less)">
+                        Number of Lymph Nodes with Isolated Tumor Cells (&#8804;
+                        20.2 mm OR 200 cells or less)
+                      </option>
+                      <option value="Size of Largest Nodal Metastatic Deposit">
+                        Size of Largest Nodal Metastatic Deposit
+                      </option>
+                      <option value="Extranodal Extension">
+                        Extranodal Extension
+                      </option>
+                    </select>
+
+                    {selectedMetastasisType ===
+                      "Size of Largest Nodal Metastatic Deposit" && (
+                      <div className="tumorExtent">
+                        <label>
+                          Size of Largest Nodal Metastatic Deposit (mm):
+                        </label>
+                        <input
+                          type="text"
+                          value={largestMetastaticDepositSize}
+                          onChange={(e) =>
+                            setLargestMetastaticDepositSize(e.target.value)
+                          }
+                          required
+                        />
+                      </div>
+                    )}
+
+                    {selectedMetastasisType === "Extranodal Extension" && (
+                      <div className="tumorExtent">
+                        <label>Extranodal Extension:</label>
+                        <select
+                          value={extranodalExtension}
+                          onChange={handleExtranodalExtensionChange}
+                          required
+                        >
+                          <option value="">Select</option>
+                          <option value="Not identified">Not identified</option>
+                          <option value="Present">Present</option>
+                        </select>
+
+                        {extranodalExtension === "Present" && (
+                          <div className="tumorExtent">
+                            <label>Extranodal Extension Size:</label>
+                            <div className="extrasize">
+                              <label className="extrasize">
+                                <input
+                                  type="radio"
+                                  name="extranodalExtensionSize"
+                                  value="<2"
+                                  checked={extranodalExtensionSize === "<2"}
+                                  onChange={() =>
+                                    setExtranodalExtensionSize("<2")
+                                  }
+                                />{" "}
+                                &#8804;2
+                              </label>
+                              <label className="extrasize">
+                                <input
+                                  type="radio"
+                                  name="extranodalExtensionSize"
+                                  value=">2"
+                                  checked={extranodalExtensionSize === ">2"}
+                                  onChange={() =>
+                                    setExtranodalExtensionSize(">2")
+                                  }
+                                />{" "}
+                                &#62; 2
+                              </label>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+              <div className="tumorExtent">
+                <h2>DISTANT METASTASIS</h2>
+                <label>Distant Site:</label>
+                <select
+                  value={distantSite}
+                  onChange={handleDistantSiteChange}
+                  required
+                >
+                  <option value="NA">NA</option>
+                  <option value="Present">Present</option>
+                </select>
+
+                {distantSite === "Present" && (
+                  <div className="check-box-size">
+                    <label>Distant Site Options:</label>
+
+                    <div className="check-boxs">
+                      <label>Lung</label>
+                      <input
+                        type="checkbox"
+                        checked={distantSiteOptions.Lung}
+                        onChange={() => handleDistantSiteOptionChange("Lung")}
+                      />
+                    </div>
+                    <div className="check-boxs">
+                      <label>Liver</label>
+                      <input
+                        type="checkbox"
+                        checked={distantSiteOptions.Liver}
+                        onChange={() => handleDistantSiteOptionChange("Liver")}
+                      />
+                    </div>
+                    <div className="check-boxs">
+                      <label>Bone</label>
+                      <input
+                        type="checkbox"
+                        checked={distantSiteOptions.Bone}
+                        onChange={() => handleDistantSiteOptionChange("Bone")}
+                      />
+                    </div>
+                    <div className="check-boxs">
+                      <label>Brain</label>
+                      <input
+                        type="checkbox"
+                        checked={distantSiteOptions.Brain}
+                        onChange={() => handleDistantSiteOptionChange("Brain")}
+                      />
+                    </div>
+                    <div className="check-boxs">
+                      <label>Other</label>
+                      <input
+                        type="checkbox"
+                        checked={distantSiteOptions.Other}
+                        onChange={() => handleDistantSiteOptionChange("Other")}
+                      />
+                    </div>
+
+                    {distantSiteOptions.Other && (
+                      <div className="tumorExtent">
+                        <label>Other Distant Site :</label>
+                        <input
+                          type="text"
+                          value={otherDistantSiteInput}
+                          onChange={handleOtherDistantSiteInputChange}
+                          required
+                        />
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
             </div>
             <div className="form-column">
-              <div>
+              <div className="historictype">
                 <h2>Histologic Type</h2>
                 <label>
                   Histologic Type:
@@ -546,7 +1223,7 @@ const Dox = () => {
                   />
                 )}
               </div>
-              <div>
+              <div className="historictype">
                 <h2>Histologic Grade (Nottingham Histologic Score)</h2>
                 <div className="applicable-box">
                   <div>
@@ -680,6 +1357,449 @@ const Dox = () => {
                     </select>
                   </div>
                 )}
+              </div>
+              <div>
+                <h2>Ductal Carcinoma In Situ (DCIS)</h2>
+                <div className="dcis">
+                  <label>DCIS Presence:</label>
+                  <select
+                    value={dcisPresence}
+                    onChange={(e) => setDcisPresence(e.target.value)}
+                    required
+                  >
+                    <option value="">Select</option>
+                    <option value="Not identified">Not identified</option>
+                    <option value="Only DCIS is present after presurgical (neoadjuvant) therapy">
+                      Only DCIS is present after presurgical (neoadjuvant)
+                      therapy
+                    </option>
+                    <option value="Present">Present</option>
+                  </select>
+                </div>
+                {dcisPresence === "Present" && (
+                  <div className="dcis">
+                    <label>Size of DCIS:</label>
+                    <div className="dcis-3">
+                      <input
+                        type="text"
+                        placeholder="_"
+                        value={dcisSize.x}
+                        onChange={(e) =>
+                          setDcisSize({ ...dcisSize, x: e.target.value })
+                        }
+                        required
+                      />
+                      x
+                      <input
+                        type="text"
+                        placeholder="_"
+                        value={dcisSize.y}
+                        onChange={(e) =>
+                          setDcisSize({ ...dcisSize, y: e.target.value })
+                        }
+                        required
+                      />
+                      mm
+                    </div>
+                    <label>Architectural Patterns:</label>
+                    <select
+                      value={architecturalPattern}
+                      onChange={(e) => setArchitecturalPattern(e.target.value)}
+                      required
+                    >
+                      <option value="">Select</option>
+                      <option value="Comedo">Comedo</option>
+                      <option value="Paget disease (DCIS involving nipple skin)">
+                        Paget disease (DCIS involving nipple skin)
+                      </option>
+                      <option value="Cribriform">Cribriform</option>
+                      <option value="Micropapillary">Micropapillary</option>
+                      <option value="Papillary">Papillary</option>
+                      <option value="Solid">Solid</option>
+                      <option value="Other">Other</option>
+                    </select>
+                    {architecturalPattern === "Other" && (
+                      <input
+                        type="text"
+                        placeholder="Type here"
+                        value={architecturalPatternOther}
+                        onChange={(e) =>
+                          setArchitecturalPatternOther(e.target.value)
+                        }
+                        required
+                      />
+                    )}
+                    <label>Nuclear Grade:</label>
+                    <select
+                      value={nuclearGrade}
+                      onChange={(e) => setNuclearGrade(e.target.value)}
+                      required
+                    >
+                      <option value="">Select</option>
+                      <option value="Grade I (low)">Grade I (low)</option>
+                      <option value="Grade II (intermediate)">
+                        Grade II (intermediate)
+                      </option>
+                      <option value="Grade III (high)">Grade III (high)</option>
+                    </select>
+                    <label>Necrosis:</label>
+                    <select
+                      value={necrosis}
+                      onChange={(e) => setNecrosis(e.target.value)}
+                      required
+                    >
+                      <option value="">Select</option>
+                      <option value="Not identified">Not identified</option>
+                      <option value="Present, focal (small foci or single cell necrosis)">
+                        Present, focal (small foci or single cell necrosis)
+                      </option>
+                      <option value="Present, central (expansive 'comedo' necrosis)">
+                        Present, central (expansive 'comedo' necrosis)
+                      </option>
+                    </select>
+                    <label>Number of Blocks with DCIS:</label>
+                    <input
+                      type="text"
+                      value={numBlocksDCIS}
+                      onChange={(e) => setNumBlocksDCIS(e.target.value)}
+                      required
+                    />
+                    <label>Number of Blocks Examined:</label>
+                    <input
+                      type="text"
+                      value={numBlocksExamined}
+                      onChange={(e) => setNumBlocksExamined(e.target.value)}
+                      required
+                    />
+                  </div>
+                )}
+              </div>
+              <div className="historictype">
+                <h2>Lobular Carcinoma In Situ (LCIS)</h2>
+                <label>LCIS Presence:</label>
+                <select
+                  value={lcisPresence}
+                  onChange={(e) => setLcisPresence(e.target.value)}
+                  required
+                >
+                  <option value="">Select</option>
+                  <option value="Not identified">Not identified</option>
+                  <option value="Present">Present</option>
+                </select>
+              </div>
+              <div className="historictype">
+                <h2>Microcalcifications</h2>
+                <label>Microcalcifications:</label>
+                <select
+                  value={microcalcifications}
+                  onChange={(e) => setMicrocalcifications(e.target.value)}
+                  required
+                >
+                  <option value="">Select</option>
+                  <option value="Not identified">Not identified</option>
+                  <option value="Present in DCIS">Present in DCIS</option>
+                  <option value="Present in invasive carcinoma">
+                    Present in invasive carcinoma
+                  </option>
+                  <option value="Present in non-neoplastic tissue">
+                    Present in non-neoplastic tissue
+                  </option>
+                  <option value="Other">Other</option>
+                </select>
+
+                {microcalcifications === "Other" && (
+                  <div id="input-his">
+                    <label>Specify Other Microcalcifications:</label>
+                    <input
+                      type="text"
+                      value={otherMicrocalcifications}
+                      onChange={(e) =>
+                        setOtherMicrocalcifications(e.target.value)
+                      }
+                      required
+                    />
+                  </div>
+                )}
+              </div>
+              <div className="tumorExtent">
+                <h2>Margins</h2>
+                <label>Margin Status for Invasive Carcinoma:</label>
+                <select
+                  value={invasiveCarcinomaMarginStatus}
+                  onChange={(e) =>
+                    setInvasiveCarcinomaMarginStatus(e.target.value)
+                  }
+                  required
+                >
+                  <option value="">Select</option>
+                  <option value="Not applicable (residual invasive carcinoma in specimen is absent)">
+                    Not applicable (residual invasive carcinoma in specimen is
+                    absent)
+                  </option>
+                  <option value="All margins are negative for invasive carcinoma.">
+                    All margins are negative for invasive carcinoma.
+                  </option>
+                  <option value="Margin involved by invasive carcinoma.">
+                    Margin involved by invasive carcinoma.
+                  </option>
+                  <option value="Distance of Invasive Carcinoma from deep resected margin">
+                    Distance of Invasive Carcinoma from deep resected margin
+                  </option>
+                </select>
+
+                {invasiveCarcinomaMarginStatus ===
+                  "Margin involved by invasive carcinoma." && (
+                  <div className="tumorExtent">
+                    <label>Specify Involved Margin:</label>
+                    <select
+                      value={involvedMargin}
+                      onChange={(e) => setInvolvedMargin(e.target.value)}
+                      required
+                    >
+                      <option value="">Select</option>
+                      <option value="Deep Resected Margin">
+                        Deep Resected Margin
+                      </option>
+                      <option value="Anterior Margin">Anterior Margin</option>
+                      <option value="Posterior Margin">Posterior Margin</option>
+                      <option value="Superior Margin">Superior Margin</option>
+                      <option value="Inferior Margin">Inferior Margin</option>
+                      <option value="Medial Margin">Medial Margin</option>
+                      <option value="Lateral Margin">Lateral Margin</option>
+                    </select>
+                  </div>
+                )}
+
+                {invasiveCarcinomaMarginStatus ===
+                  "Distance of Invasive Carcinoma from deep resected margin" && (
+                  <div className="tumorExtent">
+                    <label>
+                      Distance of Invasive Carcinoma from deep resected margin:
+                    </label>
+                    <input
+                      type="text"
+                      value={distanceFromMargin}
+                      onChange={(e) => setDistanceFromMargin(e.target.value)}
+                      required
+                    />
+                  </div>
+                )}
+              </div>
+              {dcisPresence === "Present" && (
+                <div className="tumorExtent">
+                  <label>Margin Status for DCIS:</label>
+                  <select
+                    value={dcisStatus}
+                    onChange={(e) => setDcisStatus(e.target.value)}
+                    required
+                  >
+                    <option value="">Select</option>
+                    <option value="Not applicable (no DCIS in specimen)">
+                      Not applicable (no DCIS in specimen)
+                    </option>
+                    <option value="All margins negative for DCIS">
+                      All margins negative for DCIS
+                    </option>
+                    <option value="Margin Involved by DCIS">
+                      Margin Involved by DCIS
+                    </option>
+                  </select>
+
+                  {dcisStatus === "Margin Involved by DCIS" && (
+                    <div className="tumorExtent">
+                      <label>Specify Involved Margin for DCIS:</label>
+                      <select
+                        value={dcisInvolvedMargin}
+                        onChange={(e) => setDcisInvolvedMargin(e.target.value)}
+                        required
+                      >
+                        <option value="">Select</option>
+                        <option value="Deep Resected Margin">
+                          Deep Resected Margin
+                        </option>
+                        <option value="Anterior Margin">Anterior Margin</option>
+                        <option value="Posterior Margin">
+                          Posterior Margin
+                        </option>
+                        <option value="Superior Margin">Superior Margin</option>
+                        <option value="Inferior Margin">Inferior Margin</option>
+                        <option value="Medial Margin">Medial Margin</option>
+                        <option value="Lateral Margin">Lateral Margin</option>
+                      </select>
+                    </div>
+                  )}
+                </div>
+              )}
+              <div className="tumorExtent">
+                <h2>pTNM CLASSIFICATION</h2>
+                <label>pT:</label>
+                <select
+                  value={pT}
+                  onChange={(e) => setPT(e.target.value)}
+                  required
+                >
+                  <option value="">Select</option>
+                  <option value="pT not assigned">
+                    pT not assigned (cannot be determined based on available
+                    pathological information)
+                  </option>
+                  <option value="pT0: No evidence of primary tumor">
+                    pT0: No evidence of primary tumor
+                  </option>
+                  <option value="pTis (DCIS): Ductal carcinoma in situ">
+                    pTis (DCIS): Ductal carcinoma in situ
+                  </option>
+                  <option value="pTis (Paget): Paget disease of the nipple NOT associated with invasive carcinoma and/or carcinoma in situ (DCIS) in the underlying breast parenchyma.">
+                    pTis (Paget): Paget disease of the nipple NOT associated
+                    with invasive carcinoma and/or carcinoma in situ (DCIS) in
+                    the underlying breast parenchyma.
+                  </option>
+                  <option value="pT1mi: Tumor less than or equal to 1 mm in greatest dimension">
+                    pT1mi: Tumor less than or equal to 1 mm in greatest
+                    dimension
+                  </option>
+                  <option value="pT1a: Tumor greater than 1 mm but less than or equal to 5 mm in greatest dimension">
+                    pT1a: Tumor greater than 1 mm but less than or equal to 5 mm
+                    in greatest dimension
+                  </option>
+                  <option value="pT1b: Tumor greater than 5 mm but less than or equal to 10 mm in greatest dimension">
+                    pT1b: Tumor greater than 5 mm but less than or equal to 10
+                    mm in greatest dimension
+                  </option>
+                  <option value="pT1c: Tumor greater than 10 mm but less than or equal to 20 mm in greatest dimension">
+                    pT1c: Tumor greater than 10 mm but less than or equal to 20
+                    mm in greatest dimension
+                  </option>
+                  <option value="pT1 (subcategory cannot be determined)">
+                    pT1 (subcategory cannot be determined)
+                  </option>
+                  <option value="pT2: Tumor greater than 20 mm but less than or equal to 50 mm in greatest dimension">
+                    pT2: Tumor greater than 20 mm but less than or equal to 50
+                    mm in greatest dimension
+                  </option>
+                  <option value="pT3: Tumor greater than 50 mm in greatest dimension">
+                    pT3: Tumor greater than 50 mm in greatest dimension
+                  </option>
+                  <option value="pT4a: Extension to the chest wall; invasion or adherence to pectoralis muscle in the absence of invasion of chest wall structures does not qualify as T4">
+                    pT4a: Extension to the chest wall; invasion or adherence to
+                    pectoralis muscle in the absence of invasion of chest wall
+                    structures does not qualify as T4
+                  </option>
+                  <option value="pT4b: Ulceration and/or ipsilateral satellite nodules and/or edema (including peau d'orange) of the skin which do not meet the criteria for inflammatory carcinoma">
+                    pT4b: Ulceration and/or ipsilateral satellite nodules and/or
+                    edema (including peau d'orange) of the skin which do not
+                    meet the criteria for inflammatory carcinoma
+                  </option>
+                  <option value="pT4c: Both T4a and T4b are present">
+                    pT4c: Both T4a and T4b are present
+                  </option>
+                  <option value="pT4d: Inflammatory carcinoma">
+                    pT4d: Inflammatory carcinoma
+                  </option>
+                  <option value="pT4 (subcategory cannot be determined)">
+                    pT4 (subcategory cannot be determined)
+                  </option>
+                </select>
+
+                <label>pN:</label>
+                <select
+                  value={pN}
+                  onChange={(e) => setPN(e.target.value)}
+                  required
+                >
+                  <option value="">Select</option>
+                  <option value="pN not assigned">
+                    pN not assigned (no nodes submitted or found)
+                  </option>
+                  <option value="pN not assigned (cannot be determined based on available pathological information)">
+                    pN not assigned (cannot be determined based on available
+                    pathological information)
+                  </option>
+                  <option value="pN0: No regional lymph node metastasis identified or ITCs only#">
+                    pN0: No regional lymph node metastasis identified or ITCs
+                    only#
+                  </option>
+                  <option value="pN0 (i+): ITCs only (malignant cell clusters no larger than 0.2 mm) in regional lymph node(s)">
+                    pN0 (i+): ITCs only (malignant cell clusters no larger than
+                    0.2 mm) in regional lymph node(s)
+                  </option>
+                  <option value="pN0 (mol+): Positive molecular findings by reverse transcriptase polymerase chain reaction (RT-PCR); no ITCs detected">
+                    pN0 (mol+): Positive molecular findings by reverse
+                    transcriptase polymerase chain reaction (RT-PCR); no ITCs
+                    detected
+                  </option>
+                  <option value="pN1mi: Micrometastases (approximately 200 cells, larger than 0.2 mm, but none larger than 2.0 mm)">
+                    pN1mi: Micrometastases (approximately 200 cells, larger than
+                    0.2 mm, but none larger than 2.0 mm)
+                  </option>
+                  <option value="pN1a: Metastases in 1-3 axillary lymph nodes, at least one metastasis larger than 2.0 mm##">
+                    pN1a: Metastases in 1-3 axillary lymph nodes, at least one
+                    metastasis larger than 2.0 mm##
+                  </option>
+                  <option value="pN1b: Metastases in ipsilateral internal mammary sentinel nodes, excluding ITCs">
+                    pN1b: Metastases in ipsilateral internal mammary sentinel
+                    nodes, excluding ITCs
+                  </option>
+                  <option value="pN1c: pN1a and pN1b combined">
+                    pN1c: pN1a and pN1b combined
+                  </option>
+                  <option value="pN2a: Metastases in 4-9 axillary lymph nodes (at least one tumor deposit larger than 2.0 mm)">
+                    pN2a: Metastases in 4-9 axillary lymph nodes (at least one
+                    tumor deposit larger than 2.0 mm)
+                  </option>
+                  <option value="pN2b: Metastases in clinically detected internal mammary lymph nodes with or without microscopic confirmation; with pathologically negative axillary nodes">
+                    pN2b: Metastases in clinically detected internal mammary
+                    lymph nodes with or without microscopic confirmation; with
+                    pathologically negative axillary nodes
+                  </option>
+                  <option value="pN3a: Metastases in 10 or more axillary lymph nodes (at least one tumor deposit larger than 2.0 mm) or metastases to the infraclavicular (Level III axillary lymph) nodes">
+                    pN3a: Metastases in 10 or more axillary lymph nodes (at
+                    least one tumor deposit larger than 2.0 mm) or metastases to
+                    the infraclavicular (Level III axillary lymph) nodes
+                  </option>
+                  <option value="pN3b: pN1a or pN2a in the presence of cN2b (positive internal mammary nodes by imaging); or pN2a in the presence of pN1b">
+                    pN3b: pN1a or pN2a in the presence of cN2b (positive
+                    internal mammary nodes by imaging); or pN2a in the presence
+                    of pN1b
+                  </option>
+                  <option value="pN3c: Metastases in ipsilateral supraclavicular lymph nodes">
+                    pN3c: Metastases in ipsilateral supraclavicular lymph nodes
+                  </option>
+                </select>
+
+                <label>pM:</label>
+                <select
+                  value={pM}
+                  onChange={(e) => setPM(e.target.value)}
+                  required
+                >
+                  <option value="">Select</option>
+                  <option value="Not applicable">Not applicable</option>
+                  <option value="pM1: Histologically proven metastases larger than 0.2 mm">
+                    pM1: Histologically proven metastases larger than 0.2 mm
+                  </option>
+                </select>
+              </div>
+              <div className="tumorExtent">
+                <h2>ADDITIONAL FINDINGS</h2>
+                <label>Additional Findings:</label>
+                <textarea
+                  rows="10"
+                  cols="5"
+                  value={additionalFindings}
+                  onChange={(e) => setAdditionalFindings(e.target.value)}
+                  required
+                />
+
+                <h2>Result</h2>
+                <label>Result:</label>
+                <textarea
+                  rows="10"
+                  cols="5"
+                  value={result}
+                  onChange={(e) => setResult(e.target.value)}
+                  required
+                ></textarea>
               </div>
             </div>
           </div>

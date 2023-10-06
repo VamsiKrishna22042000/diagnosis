@@ -1,5 +1,41 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap");
 
+* {
+  box-sizing: border-box;
+}
+
+/* Style for Webkit-based browsers (Chrome, Safari) */
+::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #222222;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+/* Style for Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #222222 transparent;
+}
+
+/* Style for Edge and Internet Explorer */
+*::-webkit-scrollbar {
+  width: 0.1rem;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #222222;
+}
+
+*::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
 body {
   font-family: "Roboto", sans-serif;
   background-color: #ffffff;
@@ -13,8 +49,10 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: auto;
+  height: 100vh;
   width: 100vw;
+  padding: 0;
+  overflow: hidden;
 }
 
 .form-container {
@@ -25,18 +63,29 @@ body {
   height: 100%;
   width: 100%;
   margin: 0 auto;
+  overflow: hidden;
+}
+
+.form-container h1 {
+  margin: 0;
+  padding: 0;
 }
 
 .form-row {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  margin-bottom: 20px;
+  justify-content: space-evenly;
+  align-items: flex-start;
+  height: 75%;
+  width: 100%;
+  margin-top: 2.5%;
+  overflow-y: scroll;
 }
 
 .form-column {
-  flex: 1;
-  margin-right: 10px;
+  width: 50%;
+
+  padding-left: 5%;
 }
 
 h1 {
@@ -64,10 +113,16 @@ label {
   font-family: 1.2rem;
 }
 
+.buttons-export {
+  height: 15%;
+  display: flex;
+  width: 100%;
+}
+
 select,
 input[type="text"],
 input[type="radio"] {
-  width: 80%;
+  width: 65%;
   padding: 8px;
   margin-top: 5px;
   border: 1px solid #787a91;
@@ -92,14 +147,20 @@ button.next-button:hover {
 
 .export-content {
   background-color: #ffffff;
+  height: 90%;
   border-radius: 8px;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
   padding: 20px;
   width: 80%;
-  max-width: 800px;
-  margin-top: 2%;
-  margin-bottom: 2%;
   text-align: left;
+
+  overflow: scroll;
+  margin-top: 2.5%;
+}
+
+.selected-data-list {
+  height: 100%;
+  width: 100%;
 }
 
 .export-content button {
@@ -110,6 +171,7 @@ button.next-button:hover {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  margin: 0;
 }
 
 /* Add styles for the selected data table */
@@ -169,14 +231,23 @@ button.next-button:hover {
   justify-content: space-around;
   align-items: flex-start;
   flex-wrap: wrap;
+  height: auto;
+  width: 65%;
 }
 
 .clock-box {
   height: 3.2rem;
-  width: 15%;
+  width: 25%;
   display: flex;
   flex-direction: row-reverse;
-  justify-content: space-around;
+  justify-content: space-evenly;
+  font-family: "Robto", sans-serif;
+  font-size: 0.8rem;
+}
+
+.clock-box input {
+  transform: scale(0.6);
+  margin-bottom: 4%;
 }
 
 .clocks {
@@ -185,6 +256,38 @@ button.next-button:hover {
   justify-content: space-around;
   align-items: center;
   flex-wrap: wrap;
+  height: auto;
+  width: 100%;
+}
+
+.tumorsize input {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: flex-start;
+}
+
+.tumorfoci {
+  margin-bottom: 5%;
+}
+
+.foci {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: flex-start;
+}
+
+.historictype {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: flex-start;
+  margin-bottom: 7%;
+}
+
+.historictype input {
+  width: 53%;
 }
 
 .applicable-box {
@@ -205,4 +308,61 @@ button.next-button:hover {
 .applicable-box label {
   width: 100%;
   align-self: flex-start;
+}
+
+.dcis {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: flex-start;
+  margin-bottom: 8%;
+}
+
+.dcis-3 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.dcis-3 input {
+  width: 30%;
+}
+
+.tumorExtent {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 5%;
+}
+
+#input-his {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.extrasize {
+  display: flex;
+  flex-direction: row;
+  width: 45%;
+}
+
+.check-box-size {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  width: 35%;
+}
+
+.check-boxs {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+}
+
+.check-boxs input {
+  margin-top: -0.6rem;
 }

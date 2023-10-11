@@ -6,6 +6,7 @@
 
 /* Style for Webkit-based browsers (Chrome, Safari) */
 ::-webkit-scrollbar {
+  height: 0.25rem;
   width: 0.5rem;
 }
 
@@ -365,4 +366,187 @@ button.next-button:hover {
 
 .check-boxs input {
   margin-top: -0.6rem;
+}
+
+.home-page {
+  height: 100vh;
+  width: 100vw;
+}
+
+.uploadfiles {
+  height: 35%;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.microscopic {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  list-style-type: none;
+  text-decoration: none;
+  color: black;
+  height: 85%;
+  width: 15%;
+}
+
+.microscopic img {
+  width: 95%;
+  border-radius: 0.5rem;
+  margin-top: 2.5%;
+}
+
+.upload-file {
+  height: 80%;
+  width: 50%;
+  cursor: pointer;
+}
+
+.table-data {
+  width: 100%;
+  height: 65%;
+  overflow-y: scroll;
+  padding: 2%;
+}
+
+.table-data table {
+  width: 100%;
+  border-collapse: collapse;
+  text-transform: capitalize;
+}
+
+.heads-table {
+  color: #fff;
+  background-color: #0f044c;
+  text-align: left;
+  padding: 1% 2%;
+  border: 1px solid #fff;
+  position: sticky;
+  top: -8%; /* Set the top position to 0 to keep it at the top of the container */
+  z-index: 2;
+}
+
+.description-table {
+  padding: 1% 2%;
+  color: #141e61;
+  text-align: left;
+  border: 1px solid #222222;
+  height: auto;
+  cursor: pointer;
+  width: 10rem;
+  overflow-x: scroll;
+}
+
+tr:nth-child(odd) {
+  background-color: rgba(128, 128, 128, 0.176);
+}
+
+.checks {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  align-items: center;
+  width: 50%;
+  font-size: 0.7rem;
+}
+
+.checks input {
+  margin-bottom: 5%;
+}
+
+.export-content {
+  width: 70%;
+}
+
+.container {
+  perspective: 1000px; /* Perspective for the 3D effect */
+}
+
+.microscopic-data {
+  width: 25rem;
+  height: 10rem;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease-in-out;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  transform: rotateY(0deg); /* Initial rotation angle */
+  color: #141e61;
+  border-radius: 0.5rem;
+}
+
+.input-container {
+  height: 100%;
+  width: 100%;
+  display: none;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  position: absolute;
+  transform: rotateY(
+    180deg
+  ); /* Initial rotation angle for the input container */
+  backface-visibility: hidden;
+}
+
+.microscopic-data:hover {
+  color: transparent;
+  transform: rotateY(180deg); /* Rotate on hover */
+}
+
+.microscopic-data:hover .input-container {
+  display: flex;
+}
+
+.input-container input {
+  width: 90%;
+}
+
+.input-container button {
+  padding: 2% 3%;
+  color: #ffffff;
+  background-color: #0f044c;
+  border-width: 0;
+  border-radius: 0.2rem;
+}
+
+.copy-container {
+  position: absolute;
+  height: auto;
+  max-height: 90vh;
+  width: auto;
+  top: 5%;
+  right: 5%;
+  overflow-y: scroll;
+}
+
+.copy-container button {
+  font-family: Arial, Helvetica, sans-serif;
+  padding: 5% 5%;
+  color: #fff;
+  border-width: 0;
+  background-color: #0f044c;
+  border-radius: 0.25rem;
+  width: 8rem;
+}
+
+.obtainer-data {
+  text-align: start;
+  padding: 1rem;
+  background-color: #fff;
+  border: 2px solid #222222;
+  border-radius: 0.5rem;
+}
+
+.obtainer-data p {
+  cursor: pointer;
+  padding: 2% 3%;
 }

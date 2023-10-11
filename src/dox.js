@@ -1,8 +1,58 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
+
+import { Dna } from "react-loader-spinner";
+
+import { useParams, useNavigate } from "react-router-dom";
+
+import { MdOutlineContentCopy } from "react-icons/md";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import "./dox.css";
 
+import { LuImagePlus } from "react-icons/lu";
+
 const Dox = () => {
-  function Export2Doc(element, filename = "") {
+  const { sampleId } = useParams();
+
+  const navigate = useNavigate();
+
+  const [load, setLoad] = useState(false);
+
+  const [upload, setUpload] = useState(false);
+
+  const fileInputRef = useRef("");
+
+  const handleFileChange = async (event) => {
+    setLoad(true);
+    let img = event.target.files[0];
+
+    let fd = new FormData();
+    fd.append("microscopy", img);
+    fd.append("sample_id", sampleId);
+
+    const url = `${process.env.REACT_APP_ROOT_URL}/addmicroscopyassets`;
+
+    console.log(Object.fromEntries(fd.entries()));
+
+    const reqConfigure = {
+      method: "POST",
+      body: fd,
+    };
+
+    const response = await fetch(url, reqConfigure);
+
+    if (response.ok) {
+      navigate("/");
+    }
+  };
+
+  const handleIconClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const Export2Doc = (element, filename = "") => {
     var preHtml =
       "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Export HTML To Doc</title></head><body>";
     var postHtml = "</body></html>";
@@ -32,7 +82,8 @@ const Dox = () => {
     }
 
     document.body.removeChild(downloadLink);
-  }
+    setUpload(true);
+  };
 
   const [specimenProcedure, setSpecimenProcedure] = useState("");
   const [otherProcedure, setOtherProcedure] = useState("");
@@ -203,8 +254,8 @@ const Dox = () => {
     setOtherDistantSiteInput(e.target.value);
   };
 
-  const selectedData = (
-    <div>
+  const selectedData = !upload ? (
+    <div className="final-report">
       <h1>Final Report</h1>
       <ul className="selected-data-list">
         <li>
@@ -265,7 +316,7 @@ const Dox = () => {
                   ? numFoci === "Specfic Number"
                     ? `Multiple foci of invasive carcinoma - ${numFoci}`
                     : `Multiple foci of invasive carcinoma - ${numFoci} - ${specificNumber}`
-                  : "Single focus of invasive carcinoma"}
+                  : tumorFocality}
               </span>
             </li>
           </ul>
@@ -542,34 +593,139 @@ const Dox = () => {
         </li>
       </ul>
     </div>
+  ) : (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-evenly",
+        alignItems: "center",
+        height: "100%",
+      }}
+    >
+      <LuImagePlus
+        transform="scale(10)"
+        id="file-upload"
+        onClick={handleIconClick}
+        htmlFor="file-upload"
+        color="#141e61"
+      />
+      <input
+        type="file"
+        id="file-upload"
+        ref={fileInputRef}
+        onChange={handleFileChange}
+        style={{ display: "none" }}
+      />
+      <p>Click Here To Upload the Downloaded Docx file</p>
+    </div>
   );
 
   const [moveToSecondPage, setMoveToSecondPage] = useState(false);
 
-  return (
+  const [obtainedWords, setObtainedNewWords] = useState(() => {
+    return [];
+  });
+
+  const [load4, setLoad4] = useState(false);
+
+  const getRepetedWords = async () => {
+    setLoad4(true);
+    const url = `${process.env.REACT_APP_ROOT_URL}/allwords`;
+
+    const respone = await fetch(url);
+
+    const data = await respone.json();
+
+    if (respone.ok) {
+      setObtainedNewWords(data.allWords);
+      setLoad4(false);
+    }
+  };
+
+  const handleCopyClick = (text) => {
+    navigator.clipboard.writeText(text);
+    toast.success("Copied", {
+      position: "top-center",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+    setObtainedNewWords([]);
+  };
+
+  return !load ? (
     <div className="container">
       {moveToSecondPage ? (
         <>
           <div id="exportContent" className="export-content">
             {selectedData}
           </div>
-          <div className="buttons-export">
-            <button
-              className="next-button"
-              onClick={() => setMoveToSecondPage(false)}
-            >
-              Go Back
-            </button>
-            <button
-              className="next-button"
-              onClick={() => Export2Doc("exportContent", "test")}
-            >
-              Export as Doc
-            </button>
-          </div>
+          {!upload && (
+            <div className="buttons-export">
+              <button
+                className="next-button"
+                onClick={() => setMoveToSecondPage(false)}
+              >
+                Go Back
+              </button>
+              <button
+                className="next-button"
+                onClick={() => Export2Doc("exportContent", "test")}
+              >
+                Export as Doc
+              </button>
+            </div>
+          )}
         </>
       ) : (
         <div className="form-container">
+          <ToastContainer />
+          <div className="copy-container">
+            {obtainedWords.length > 0 ? (
+              <div className="obtainer-data">
+                {obtainedWords.map((each) => (
+                  <div
+                    onClick={() => handleCopyClick(each)}
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-start",
+                      alignItems: "center",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <p style={{ cursor: "pointer" }}>{each}</p>{" "}
+                    <MdOutlineContentCopy
+                      style={{ marginLeft: ".5rem", cursor: "pointer" }}
+                    />
+                  </div>
+                ))}
+              </div>
+            ) : !load4 ? (
+              <button
+                style={{ cursor: "pointer" }}
+                onClick={getRepetedWords}
+                type="button"
+              >
+                Repeted Words
+              </button>
+            ) : (
+              <>
+                <Dna
+                  visible={true}
+                  height="80"
+                  width="80"
+                  ariaLabel="dna-loading"
+                  wrapperStyle={{}}
+                  wrapperClass="dna-wrapper"
+                />
+              </>
+            )}
+          </div>
           <h1>Microscopy Template</h1>
           <div className="form-row">
             <div className="form-column">
@@ -1809,6 +1965,25 @@ const Dox = () => {
           </button>
         </div>
       )}
+    </div>
+  ) : (
+    <div
+      style={{
+        height: "100vh",
+        width: "100vw",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <Dna
+        visible={true}
+        height="80"
+        width="80"
+        ariaLabel="dna-loading"
+        wrapperStyle={{}}
+        wrapperClass="dna-wrapper"
+      />
     </div>
   );
 };

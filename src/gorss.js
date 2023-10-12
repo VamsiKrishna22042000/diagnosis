@@ -4,6 +4,8 @@ import { useParams, useNavigate } from "react-router-dom";
 
 import { LuImagePlus } from "react-icons/lu";
 
+import { FiArrowLeftCircle } from "react-icons/fi";
+
 import { Dna } from "react-loader-spinner";
 
 import { ToastContainer, toast } from "react-toastify";
@@ -29,12 +31,10 @@ const Gross = () => {
     let img = event.target.files[0];
 
     let fd = new FormData();
-    fd.append("microscopy", img);
+    fd.append("gros", img);
     fd.append("sample_id", sampleId);
 
-    const url = `${process.env.REACT_APP_ROOT_URL}/addmicroscopyassets`;
-
-    console.log(Object.fromEntries(fd.entries()));
+    const url = `${process.env.REACT_APP_ROOT_URL}/addgrossassets`;
 
     const reqConfigure = {
       method: "POST",
@@ -371,21 +371,22 @@ const Gross = () => {
           <div id="exportContent" className="export-content">
             {selectedData}
           </div>
-          !upload &&{" "}
-          <div className="buttons-export">
-            <button
-              className="next-button"
-              onClick={() => setMoveToSecondPage(false)}
-            >
-              Go Back
-            </button>
-            <button
-              className="next-button"
-              onClick={() => Export2Doc("exportContent", "test", sampleId)}
-            >
-              Export as Doc
-            </button>
-          </div>
+          {!upload && (
+            <div className="buttons-export">
+              <button
+                className="next-button"
+                onClick={() => setMoveToSecondPage(false)}
+              >
+                Go Back
+              </button>
+              <button
+                className="next-button"
+                onClick={() => Export2Doc("exportContent", "test", sampleId)}
+              >
+                Export as Doc
+              </button>
+            </div>
+          )}
         </>
       ) : (
         <div className="form-container">
@@ -431,7 +432,25 @@ const Gross = () => {
               </>
             )}
           </div>
-          <h1>Gross Template</h1>
+
+          <button
+            onClick={() => {
+              navigate("/");
+            }}
+            style={{
+              position: "absolute",
+              left: "1%",
+              top: "5%",
+              borderWidth: 0,
+              background: "#ffffff",
+              cursor: "pointer",
+            }}
+            type="button"
+          >
+            <FiArrowLeftCircle color={"#141e61"} fontSize={"1.5rem"} />
+          </button>
+          <h1 style={{ marginLeft: "5%" }}>Gross Template</h1>
+
           <div className="form-row">
             <div className="form-column">
               <h2>Specimen</h2>

@@ -491,15 +491,10 @@ tr:nth-child(odd) {
   justify-content: space-evenly;
   align-items: center;
   position: absolute;
-  transform: rotateY(
-    180deg
-  ); /* Initial rotation angle for the input container */
-  backface-visibility: hidden;
 }
 
 .microscopic-data:hover {
   color: transparent;
-  transform: rotateY(180deg); /* Rotate on hover */
 }
 
 .microscopic-data:hover .input-container {

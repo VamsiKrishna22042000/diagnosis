@@ -4,6 +4,8 @@ import { Dna } from "react-loader-spinner";
 
 import { useParams, useNavigate } from "react-router-dom";
 
+import { FiArrowLeftCircle } from "react-icons/fi";
+
 import { MdOutlineContentCopy } from "react-icons/md";
 
 import { ToastContainer, toast } from "react-toastify";
@@ -726,7 +728,23 @@ const Dox = () => {
               </>
             )}
           </div>
-          <h1>Microscopy Template</h1>
+          <button
+            onClick={() => {
+              navigate("/");
+            }}
+            style={{
+              position: "absolute",
+              left: "1%",
+              top: "5%",
+              borderWidth: 0,
+              background: "#ffffff",
+              cursor: "pointer",
+            }}
+            type="button"
+          >
+            <FiArrowLeftCircle color={"#141e61"} fontSize={"1.5rem"} />
+          </button>
+          <h1 style={{ marginLeft: "5%" }}>Microscopy Template</h1>
           <div className="form-row">
             <div className="form-column">
               <div>

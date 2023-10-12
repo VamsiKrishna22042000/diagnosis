@@ -2,6 +2,8 @@ import "./dox.css";
 
 import { useRef, useState, useEffect } from "react";
 
+import { FiArrowLeftCircle } from "react-icons/fi";
+
 import { Link } from "react-router-dom";
 
 import { LuImagePlus } from "react-icons/lu";
@@ -49,6 +51,7 @@ const MainTemplate = () => {
     if (response.ok) {
       setTotalPages(data.totalPages);
       setTheData(data.importedData);
+
       setLoad(true);
     }
   };
@@ -126,6 +129,7 @@ const MainTemplate = () => {
   };
 
   const changeToPrevPage = () => {
+    setTheData([]);
     if (arrayOfPages[9] <= 10) {
       let PrevArr = [];
       for (let i = 1; i <= 10; i++) {
@@ -147,6 +151,7 @@ const MainTemplate = () => {
   };
 
   const changeToNextPage = () => {
+    setTheData([]);
     if (arrayOfPages[9] + 10 > totalPages) {
       let nextArr = [];
 
@@ -243,63 +248,76 @@ const MainTemplate = () => {
       </div>
       <div className="table-data">
         <ToastContainer />
-        <table>
-          <tr>
-            <th className="heads-table">Regd Date</th>
-            <th className="heads-table">Sample Id</th>
-            <th className="heads-table">Patient Name</th>
-            <th className="heads-table">Test Name</th>
-            <th className="heads-table">Accession No</th>
-            <th className="heads-table">Doctor</th>
-            <th style={{ textAlign: "center" }} className="heads-table">
-              Microscopy Data
-            </th>
-            <th style={{ textAlign: "center" }} className="heads-table">
-              Gross Date
-            </th>
-          </tr>
-          {getTheData.map((each) => (
-            <tr className="row" id={each._id}>
-              <td className="description-table">{each.regd_date}</td>
-              <td className="description-table">{each.sample_id}</td>
-              <td className="description-table">{each.patient_name}</td>
-              <td className="description-table">{each.test_name}</td>
-              <td className="description-table">{each.accession_no}</td>
-              <td className="description-table">{each.doctor}</td>
-              <td className="description-table">
-                {each.microscopy === "" ? (
-                  <Link
-                    style={{
-                      textDecoration: "none",
-                      paddingLeft: "45%",
-                    }}
-                    to={`/microscopy/${each.sample_id}`}
-                  >
-                    <BsCloudUploadFill color="red" />
-                  </Link>
-                ) : (
-                  <a style={{ paddingLeft: "45%" }} href={each.microscopy}>
-                    <BsCloudDownloadFill color="green" />
-                  </a>
-                )}
-              </td>
-              <td className="description-table">
-                {each.gros === "" ? (
-                  <Link
-                    style={{ textDecoration: "none", paddingLeft: "45%" }}
-                    to={`/gorss/${each.sample_id}`}
-                  >
-                    <BsCloudUploadFill color="red" />
-                  </Link>
-                ) : (
-                  <a style={{ paddingLeft: "45%" }} href={each.gros}>
-                    <BsCloudDownloadFill color="green" />
-                  </a>
-                )}
-              </td>
+        {getTheData.length > 0 ? (
+          <table>
+            <tr>
+              <th className="heads-table">Regd Date</th>
+              <th className="heads-table">Sample Id</th>
+              <th className="heads-table">Patient Name</th>
+              <th className="heads-table">Test Name</th>
+              <th className="heads-table">Accession No</th>
+              <th className="heads-table">Doctor</th>
+              <th style={{ textAlign: "center" }} className="heads-table">
+                Microscopy Data
+              </th>
+              <th style={{ textAlign: "center" }} className="heads-table">
+                Gross Date
+              </th>
             </tr>
-          ))}
-        </table>
+            {getTheData.map((each) => (
+              <tr className="row" id={each._id}>
+                <td className="description-table">{each.regd_date}</td>
+                <td className="description-table">{each.sample_id}</td>
+                <td className="description-table">{each.patient_name}</td>
+                <td className="description-table">{each.test_name}</td>
+                <td className="description-table">{each.accession_no}</td>
+                <td className="description-table">{each.doctor}</td>
+                <td className="description-table">
+                  {each.microscopy === "" ? (
+                    <Link
+                      style={{
+                        textDecoration: "none",
+                        paddingLeft: "45%",
+                      }}
+                      to={`/microscopy/${each.sample_id}`}
+                    >
+                      <BsCloudUploadFill color="red" />
+                    </Link>
+                  ) : (
+                    <a style={{ paddingLeft: "45%" }} href={each.microscopy}>
+                      <BsCloudDownloadFill color="green" />
+                    </a>
+                  )}
+                </td>
+                <td className="description-table">
+                  {each.gros === "" ? (
+                    <Link
+                      style={{ textDecoration: "none", paddingLeft: "45%" }}
+                      to={`/gorss/${each.sample_id}`}
+                    >
+                      <BsCloudUploadFill color="red" />
+                    </Link>
+                  ) : (
+                    <a style={{ paddingLeft: "45%" }} href={each.gros}>
+                      <BsCloudDownloadFill color="green" />
+                    </a>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </table>
+        ) : (
+          <>
+            <Dna
+              visible={true}
+              height="80"
+              width="80"
+              ariaLabel="dna-loading"
+              wrapperStyle={{}}
+              wrapperClass="dna-wrapper"
+            />
+          </>
+        )}
       </div>
       <div className="pagenataion">
         {arrayOfPages[9] === 10 ? (
@@ -319,6 +337,7 @@ const MainTemplate = () => {
           <button
             onClick={() => {
               setPageNumber(each);
+              setTheData([]);
             }}
             type="button"
             className={each === pageNumber ? "pageSelected" : "pageNotSelected"}

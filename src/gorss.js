@@ -82,6 +82,7 @@ const Gross = () => {
     }
 
     document.body.removeChild(downloadLink);
+    setUpload(true);
   };
 
   const [moveToSecondPage, setMoveToSecondPage] = useState(false);
@@ -370,6 +371,7 @@ const Gross = () => {
           <div id="exportContent" className="export-content">
             {selectedData}
           </div>
+          !upload &&{" "}
           <div className="buttons-export">
             <button
               className="next-button"
@@ -381,7 +383,7 @@ const Gross = () => {
               className="next-button"
               onClick={() => Export2Doc("exportContent", "test", sampleId)}
             >
-              Export as Doc & Upload
+              Export as Doc
             </button>
           </div>
         </>

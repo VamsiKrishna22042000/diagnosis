@@ -24,18 +24,30 @@ const MainTemplate = () => {
 
   const [load3, setLoad3] = useState(false);
 
+  const [pageNumber, setPageNumber] = useState(1);
+
+  const [totalPages, setTotalPages] = useState(() => {
+    return 0;
+  });
+
+  const [arrayOfPages, setArrPages] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+
   useEffect(() => {
     getTheExcelData();
   }, []);
 
+  useEffect(() => {
+    getTheExcelData();
+  }, [pageNumber]);
+
   const getTheExcelData = async () => {
-    const url = `${process.env.REACT_APP_ROOT_URL}/getimported`;
+    const url = `${process.env.REACT_APP_ROOT_URL}/getimported?page=${pageNumber}`;
 
     const response = await fetch(url);
     const data = await response.json();
 
     if (response.ok) {
-      /**console.log(data.importedData);*/
+      setTotalPages(data.totalPages);
       setTheData(data.importedData);
       setLoad(true);
     }
@@ -110,6 +122,50 @@ const MainTemplate = () => {
       });
       setLoad2(false);
       setNewWord("");
+    }
+  };
+
+  const changeToPrevPage = () => {
+    if (arrayOfPages[9] <= 10) {
+      let PrevArr = [];
+      for (let i = 1; i <= 10; i++) {
+        PrevArr.push(i);
+      }
+      console.log(PrevArr);
+      setArrPages(PrevArr);
+      setPageNumber(PrevArr[0]);
+    } else {
+      let PrevArr = [];
+
+      for (let i = arrayOfPages[0] - 10; i <= arrayOfPages[0] - 1; i++) {
+        PrevArr.push(i);
+      }
+      console.log(PrevArr);
+      setArrPages(PrevArr);
+      setPageNumber(PrevArr[0]);
+    }
+  };
+
+  const changeToNextPage = () => {
+    if (arrayOfPages[9] + 10 > totalPages) {
+      let nextArr = [];
+
+      for (let i = totalPages - 9; i <= totalPages; i++) {
+        nextArr.push(i);
+      }
+      setArrPages(nextArr);
+      console.log(nextArr);
+      setPageNumber(nextArr[0]);
+    } else {
+      let nextArr = [];
+
+      for (let i = arrayOfPages[9] + 1; i <= arrayOfPages[9] + 10; i++) {
+        nextArr.push(i);
+      }
+
+      setArrPages(nextArr);
+      console.log(nextArr);
+      setPageNumber(nextArr[0]);
     }
   };
 
@@ -244,6 +300,45 @@ const MainTemplate = () => {
             </tr>
           ))}
         </table>
+      </div>
+      <div className="pagenataion">
+        {arrayOfPages[9] === 10 ? (
+          <button type="button" className="greybutton">
+            Prev
+          </button>
+        ) : (
+          <button
+            onClick={changeToPrevPage}
+            className="pageNotSelected"
+            type="button"
+          >
+            Prev
+          </button>
+        )}
+        {arrayOfPages.map((each) => (
+          <button
+            onClick={() => {
+              setPageNumber(each);
+            }}
+            type="button"
+            className={each === pageNumber ? "pageSelected" : "pageNotSelected"}
+          >
+            {each}
+          </button>
+        ))}
+        {arrayOfPages[0] === totalPages - 9 ? (
+          <button type="button" className="greybutton">
+            Next
+          </button>
+        ) : (
+          <button
+            onClick={changeToNextPage}
+            className="pageNotSelected"
+            type="button"
+          >
+            Next
+          </button>
+        )}
       </div>
     </div>
   ) : (

@@ -175,7 +175,13 @@ const MainTemplate = () => {
   };
 
   const openPdf = (e) => {
-    window.open(e, "_blank");
+    const fileName = e.split("/").pop();
+    const aTag = document.createElement("a");
+    aTag.href = e;
+    aTag.setAttribute("download", fileName);
+    document.body.appendChild(aTag);
+    aTag.click();
+    aTag.remove();
   };
 
   return load ? (

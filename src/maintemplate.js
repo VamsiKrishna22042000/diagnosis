@@ -2,8 +2,6 @@ import "./dox.css";
 
 import { useRef, useState, useEffect } from "react";
 
-import { FiArrowLeftCircle } from "react-icons/fi";
-
 import { Link } from "react-router-dom";
 
 import { LuImagePlus } from "react-icons/lu";
@@ -284,7 +282,11 @@ const MainTemplate = () => {
                       <BsCloudUploadFill color="red" />
                     </Link>
                   ) : (
-                    <a style={{ paddingLeft: "45%" }} href={each.microscopy}>
+                    <a
+                      style={{ paddingLeft: "45%" }}
+                      href={each.microscopy}
+                      target="_blank"
+                    >
                       <BsCloudDownloadFill color="green" />
                     </a>
                   )}
@@ -298,7 +300,11 @@ const MainTemplate = () => {
                       <BsCloudUploadFill color="red" />
                     </Link>
                   ) : (
-                    <a style={{ paddingLeft: "45%" }} href={each.gros}>
+                    <a
+                      style={{ paddingLeft: "45%" }}
+                      href={each.gros}
+                      target="_blank"
+                    >
                       <BsCloudDownloadFill color="green" />
                     </a>
                   )}

@@ -2,7 +2,7 @@ import "./dox.css";
 
 import { useRef, useState, useEffect } from "react";
 
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
 import { LuImagePlus } from "react-icons/lu";
 
@@ -17,6 +17,8 @@ const MainTemplate = () => {
   const [getTheData, setTheData] = useState(() => {
     return [];
   });
+
+  const navigate = useNavigate();
 
   const [load, setLoad] = useState(false);
 
@@ -282,13 +284,13 @@ const MainTemplate = () => {
                       <BsCloudUploadFill color="red" />
                     </Link>
                   ) : (
-                    <a
+                    <p
+                      onClick={() => (window.location.href = each.microscopy)}
                       style={{ paddingLeft: "45%" }}
-                      href={each.microscopy}
-                      target="_blank"
+                      download={"Microscopy Report"}
                     >
                       <BsCloudDownloadFill color="green" />
-                    </a>
+                    </p>
                   )}
                 </td>
                 <td className="description-table">
@@ -300,13 +302,15 @@ const MainTemplate = () => {
                       <BsCloudUploadFill color="red" />
                     </Link>
                   ) : (
-                    <a
+                    <p
+                      download={"Gross Report"}
                       style={{ paddingLeft: "45%" }}
-                      href={each.gros}
-                      target="_blank"
+                      onClick={() => {
+                        window.location.href = each.gors;
+                      }}
                     >
                       <BsCloudDownloadFill color="green" />
-                    </a>
+                    </p>
                   )}
                 </td>
               </tr>

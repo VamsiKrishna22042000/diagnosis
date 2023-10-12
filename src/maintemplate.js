@@ -174,6 +174,10 @@ const MainTemplate = () => {
     }
   };
 
+  const openPdf = (e) => {
+    window.open(e, "_blank");
+  };
+
   return load ? (
     <div className="home-page">
       <div className="uploadfiles">
@@ -285,7 +289,9 @@ const MainTemplate = () => {
                     </Link>
                   ) : (
                     <p
-                      onClick={() => (window.location.href = each.microscopy)}
+                      onClick={() => {
+                        openPdf(each.microscopy);
+                      }}
                       style={{ paddingLeft: "45%" }}
                       download={"Microscopy Report"}
                     >
@@ -306,7 +312,7 @@ const MainTemplate = () => {
                       download={"Gross Report"}
                       style={{ paddingLeft: "45%" }}
                       onClick={() => {
-                        window.location.href = each.gors;
+                        openPdf(each.gros);
                       }}
                     >
                       <BsCloudDownloadFill color="green" />

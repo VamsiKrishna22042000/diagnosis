@@ -14,8 +14,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<MainTemplate />} />
-          <Route path="/microscopy/:sampleId" element={<Dox />} />
-          <Route path="/gorss/:sampleId" element={<Gross />} />
+          <Route path="/microscopy/:sample_id" element={<Dox />} />
+          <Route path="/gorss/:sample_id" element={<Gross />} />
           <Route path="*" element={<Notfound />} />
         </Routes>
       </BrowserRouter>

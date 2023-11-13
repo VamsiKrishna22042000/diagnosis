@@ -1,6 +1,8 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 import { Dna } from "react-loader-spinner";
+
+import axios from "axios";
 
 import { useParams, useNavigate } from "react-router-dom";
 
@@ -16,7 +18,7 @@ import "./dox.css";
 import { LuImagePlus } from "react-icons/lu";
 
 const Dox = () => {
-  const { sampleId } = useParams();
+  const { sample_id } = useParams();
 
   const navigate = useNavigate();
 
@@ -32,7 +34,7 @@ const Dox = () => {
 
     let fd = new FormData();
     fd.append("microscopy", img);
-    fd.append("sample_id", sampleId);
+    fd.append("sample_id", sample_id);
 
     const url = `${process.env.REACT_APP_ROOT_URL}/addmicroscopyassets`;
 
@@ -86,6 +88,681 @@ const Dox = () => {
     document.body.removeChild(downloadLink);
     setUpload(true);
   };
+
+  const handleNextPageClick = () => {
+    if (specimenProcedure === "") {
+      toast.error("Select Procedure", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (specimenProcedure === "Other" && otherProcedure === "") {
+      toast.error("Enter Other Procedure", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (specimenLaterality === "") {
+      toast.error("Select Specimen Laterality", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (tumorSite === "") {
+      toast.error("Select Tumor Site", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (tumorSite === "Clock position" && !clockPositions.length > 0) {
+      toast.error("Select Atleast One Clock Position", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      tumorSite === "Distance from Nipple Areola Complex" &&
+      distanceFromNipple === ""
+    ) {
+      toast.error("Enter Distance from Nipple Areola Complex", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (selectedOption === "") {
+      toast.error("Select Tumor Size", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      selectedOption === "Other" &&
+      (customSize.height === "" ||
+        customSize.length === "" ||
+        customSize.width === "")
+    ) {
+      toast.error("Enter the Tumor Sizes", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (tumorFocality === "") {
+      toast.error("Select Tumor Focality", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      tumorFocality === "Multiple foci of invasive carcinoma" &&
+      numFoci === ""
+    ) {
+      toast.error("Select Specific number of Foci", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      tumorFocality === "Multiple foci of  invasive carcinoma" &&
+      numFoci === "Specific number" &&
+      specificNumber === ""
+    ) {
+      toast.error("Enter Specific number", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (tumorExtent === "") {
+      toast.error("Select Tumor Extent", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      tumorExtent === "Skin is present and involved" &&
+      skinInvolvement === ""
+    ) {
+      toast.error("Select Skin Involvment", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      tumorExtent === "Skeletal muscle is present and involved" &&
+      skeletalMuscleInvolvement === ""
+    ) {
+      toast.error("Select Skeletal Muscle Involvment", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (lymphovascularInvasion === "") {
+      toast.error("Select Lymphovascular Invasion", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      lymphovascularInvasion === "Present" &&
+      lymphovascularInvasionExtent === ""
+    ) {
+      toast.error("Select Lymphovascular Invasion Extent", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (breastTreatmentEffect === "") {
+      toast.error("Select Treatment Effect in the Breast", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (lymphNodeTreatmentEffect === "") {
+      toast.error("Select Treatment Effect in the Lymph Nodes", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (totalLymphNodesExamined === "") {
+      toast.error("Enter Total Number of Lymph Nodes Examined", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (totalSentinelNodesExamined === "") {
+      toast.error("Enter Total Number of Sentinel Nodes Examined", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (lymphNodesInvolved === "") {
+      toast.error("Select Lymphnodes Involved", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (lymphNodesInvolved === "Yes" && selectedMetastasisType === "") {
+      toast.error("Select Select Metastasis Type", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      lymphNodesInvolved === "Yes" &&
+      selectedMetastasisType === "Size of Largest Nodal Metastatic Deposit" &&
+      largestMetastaticDepositSize === ""
+    ) {
+      toast.error("Enter Size of Largest Nodal Metastatic Deposit", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      lymphNodesInvolved === "Yes" &&
+      selectedMetastasisType === "Extranodal Extension" &&
+      extranodalExtension === ""
+    ) {
+      toast.error("Select Extranodal Extension", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      lymphNodesInvolved === "Yes" &&
+      selectedMetastasisType === "Extranodal Extension" &&
+      extranodalExtension === "Present" &&
+      extranodalExtensionSize === ""
+    ) {
+      toast.error("Select Extranodal Extension Size", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (distantSite === "") {
+      toast.error("Select Distant Site", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      distantSite === "Present" &&
+      distantSiteOptions.Liver === false &&
+      distantSiteOptions.Bone === false &&
+      distantSiteOptions.Brain === false &&
+      distantSiteOptions.Lung === false &&
+      distantSiteOptions.Other === false
+    ) {
+      toast.error("Select Atleast Distant Site Options", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      distantSite === "Present" &&
+      distantSiteOptions.Other === true &&
+      otherDistantSiteInput === ""
+    ) {
+      toast.error("Enter Other Distant Site", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (histologicType === "") {
+      toast.error("Select Histologic Type", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (histologicType === "Other" && otherHistologicType === "") {
+      toast.error("Enter Other Histologic Type", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (histologicGrade === "") {
+      toast.error("Select Histologic Grade", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (histologicGrade === "Applicable" && nuclearPleomorphism === "") {
+      toast.error("Select Nuclear Pleomorphism", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (histologicGrade === "Applicable" && mitoticRate === "") {
+      toast.error("Select Mitotic Rate", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (histologicGrade === "Applicable" && overallGrade === "") {
+      toast.error("Select Overall Grade", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (dcisPresence === "") {
+      toast.error("Select DCIS Presence", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      dcisPresence === "Present" &&
+      (dcisSize.x === "" || dcisSize.y === "")
+    ) {
+      toast.error("Enter DCIS Sizes", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (dcisPresence === "Present" && architecturalPattern === "") {
+      toast.error("Select Architectural Patterns", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      dcisPresence === "Present" &&
+      architecturalPattern === "Other" &&
+      architecturalPatternOther === ""
+    ) {
+      toast.error("Select Architectural Other Pattern", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (dcisPresence === "Present" && necrosis === "") {
+      toast.error("Select Necrosis", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (dcisPresence === "Present" && numBlocksDCIS === "") {
+      toast.error("Enter Number of Blocks with DCIS", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (dcisPresence === "Present" && numBlocksExamined === "") {
+      toast.error("Enter Number of Blocks Examined", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (lcisPresence === "") {
+      toast.error("Select LCIS Presence", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (microcalcifications === "") {
+      toast.error("Select Microcalcifications", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      microcalcifications === "Other" &&
+      otherMicrocalcifications === ""
+    ) {
+      toast.error("Enter Other Microcalcifications", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (invasiveCarcinomaMarginStatus === "") {
+      toast.error("Select Margin Status for Invasive Carcinoma", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      invasiveCarcinomaMarginStatus ===
+        "Margin involved by invasive carcinoma." &&
+      involvedMargin === ""
+    ) {
+      toast.error("Select Specify Involved Margin", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      invasiveCarcinomaMarginStatus ===
+        "Distance of Invasive Carcinoma from deep resected margin" &&
+      distanceFromMargin === ""
+    ) {
+      toast.error(
+        "Enter Distance of Invasive Carcinoma from deep resected margin ",
+        {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        }
+      );
+    } else if (dcisPresence === "Present" && dcisStatus === "") {
+      toast.error("Select Margin Status for DCIS", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      dcisPresence === "Present" &&
+      dcisStatus === "Margin Involved by DCIS" &&
+      dcisInvolvedMargin === ""
+    ) {
+      toast.error("Enter Specific Involved Margin for DCIS", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (pT === "") {
+      toast.error("Select pT", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (pN === "") {
+      toast.error("Select pN", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (pM === "") {
+      toast.error("Select pM", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (additionalFindings === "") {
+      toast.error("Enter Additional Findings", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (result === "") {
+      toast.error("Enter Result", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else {
+      setMoveToSecondPage(true);
+    }
+  };
+
+  const [notes, setNotes] = useState("");
 
   const [specimenProcedure, setSpecimenProcedure] = useState("");
   const [otherProcedure, setOtherProcedure] = useState("");
@@ -218,10 +895,6 @@ const Dox = () => {
     }));
   };
 
-  const handleNextPageClick = () => {
-    setMoveToSecondPage(true);
-  };
-
   const handleTumorFocalityChange = (e) => {
     setTumorFocality(e.target.value);
   };
@@ -324,7 +997,6 @@ const Dox = () => {
           </ul>
         </li>
         <li>
-          <h2>Histologic Type</h2>
           <ul>
             {histologicType && (
               <li>
@@ -414,7 +1086,6 @@ const Dox = () => {
           </ul>
         </li>
         <li>
-          <h2>Tumor Extent</h2>
           <ul>
             <li>
               <strong>Tumor Extent : </strong> {tumorExtent}
@@ -439,7 +1110,6 @@ const Dox = () => {
           </ul>
         </li>
         <li>
-          <h2>Lymphovascular Invasion</h2>
           <ul>
             <strong>Lymphovascular Invasion : </strong>{" "}
             {lymphovascularInvasion === "Present"
@@ -448,7 +1118,6 @@ const Dox = () => {
           </ul>
         </li>
         <li>
-          <h2>Microcalcifications</h2>
           <ul>
             <strong>Microcalcifications : </strong>{" "}
             {microcalcifications === "Other"
@@ -458,7 +1127,6 @@ const Dox = () => {
         </li>
         {breastTreatmentEffect !== "NA" && (
           <li>
-            <h2>Treatment Effect in the Breast : </h2>
             <ul>
               <strong>Treatment Effect in the Breast : </strong>{" "}
               {breastTreatmentEffect}
@@ -467,7 +1135,6 @@ const Dox = () => {
         )}
         {lymphNodeTreatmentEffect !== "NA" && (
           <li>
-            <h2>Treatment Effect in the Lymph Nodes : </h2>
             <ul>
               <strong>Treatment Effect in the Lymph Nodes : </strong>{" "}
               {lymphNodeTreatmentEffect}
@@ -658,6 +1325,1684 @@ const Dox = () => {
       theme: "colored",
     });
     setObtainedNewWords([]);
+  };
+
+  const [saveLoad, setSaveLoad] = useState(false);
+
+  const saveData = async () => {
+    if (specimenProcedure === "") {
+      toast.error("Select Procedure", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (specimenProcedure === "Other" && otherProcedure === "") {
+      toast.error("Enter Other Procedure", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (specimenLaterality === "") {
+      toast.error("Select Specimen Laterality", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (tumorSite === "") {
+      toast.error("Select Tumor Site", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (tumorSite === "Clock position" && !clockPositions.length > 0) {
+      toast.error("Select Atleast One Clock Position", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      tumorSite === "Distance from Nipple Areola Complex" &&
+      distanceFromNipple === ""
+    ) {
+      toast.error("Enter Distance from Nipple Areola Complex", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (selectedOption === "") {
+      toast.error("Select Tumor Size", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      selectedOption === "Other" &&
+      (customSize.height === "" ||
+        customSize.length === "" ||
+        customSize.width === "")
+    ) {
+      toast.error("Enter the Tumor Sizes", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (tumorFocality === "") {
+      toast.error("Select Tumor Focality", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      tumorFocality === "Multiple foci of invasive carcinoma" &&
+      numFoci === ""
+    ) {
+      toast.error("Select Specific number of Foci", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      tumorFocality === "Multiple foci of  invasive carcinoma" &&
+      numFoci === "Specific number" &&
+      specificNumber === ""
+    ) {
+      toast.error("Enter Specific number", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (tumorExtent === "") {
+      toast.error("Select Tumor Extent", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      tumorExtent === "Skin is present and involved" &&
+      skinInvolvement === ""
+    ) {
+      toast.error("Select Skin Involvment", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      tumorExtent === "Skeletal muscle is present and involved" &&
+      skeletalMuscleInvolvement === ""
+    ) {
+      toast.error("Select Skeletal Muscle Involvment", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (lymphovascularInvasion === "") {
+      toast.error("Select Lymphovascular Invasion", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      lymphovascularInvasion === "Present" &&
+      lymphovascularInvasionExtent === ""
+    ) {
+      toast.error("Select Lymphovascular Invasion Extent", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (breastTreatmentEffect === "") {
+      toast.error("Select Treatment Effect in the Breast", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (lymphNodeTreatmentEffect === "") {
+      toast.error("Select Treatment Effect in the Lymph Nodes", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (totalLymphNodesExamined === "") {
+      toast.error("Enter Total Number of Lymph Nodes Examined", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (totalSentinelNodesExamined === "") {
+      toast.error("Enter Total Number of Sentinel Nodes Examined", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (lymphNodesInvolved === "") {
+      toast.error("Select Lymphnodes Involved", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (lymphNodesInvolved === "Yes" && selectedMetastasisType === "") {
+      toast.error("Select Select Metastasis Type", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      lymphNodesInvolved === "Yes" &&
+      selectedMetastasisType === "Size of Largest Nodal Metastatic Deposit" &&
+      largestMetastaticDepositSize === ""
+    ) {
+      toast.error("Enter Size of Largest Nodal Metastatic Deposit", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      lymphNodesInvolved === "Yes" &&
+      selectedMetastasisType === "Extranodal Extension" &&
+      extranodalExtension === ""
+    ) {
+      toast.error("Select Extranodal Extension", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      lymphNodesInvolved === "Yes" &&
+      selectedMetastasisType === "Extranodal Extension" &&
+      extranodalExtension === "Present" &&
+      extranodalExtensionSize === ""
+    ) {
+      toast.error("Select Extranodal Extension Size", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (distantSite === "") {
+      toast.error("Select Distant Site", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      distantSite === "Present" &&
+      distantSiteOptions.Liver === false &&
+      distantSiteOptions.Bone === false &&
+      distantSiteOptions.Brain === false &&
+      distantSiteOptions.Lung === false &&
+      distantSiteOptions.Other === false
+    ) {
+      toast.error("Select Atleast Distant Site Options", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      distantSite === "Present" &&
+      distantSiteOptions.Other === true &&
+      otherDistantSiteInput === ""
+    ) {
+      toast.error("Enter Other Distant Site", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (histologicType === "") {
+      toast.error("Select Histologic Type", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (histologicType === "Other" && otherHistologicType === "") {
+      toast.error("Enter Other Histologic Type", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (histologicGrade === "") {
+      toast.error("Select Histologic Grade", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (histologicGrade === "Applicable" && nuclearPleomorphism === "") {
+      toast.error("Select Nuclear Pleomorphism", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (histologicGrade === "Applicable" && mitoticRate === "") {
+      toast.error("Select Mitotic Rate", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (histologicGrade === "Applicable" && overallGrade === "") {
+      toast.error("Select Overall Grade", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (dcisPresence === "") {
+      toast.error("Select DCIS Presence", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      dcisPresence === "Present" &&
+      (dcisSize.x === "" || dcisSize.y === "")
+    ) {
+      toast.error("Enter DCIS Sizes", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (dcisPresence === "Present" && architecturalPattern === "") {
+      toast.error("Select Architectural Patterns", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      dcisPresence === "Present" &&
+      architecturalPattern === "Other" &&
+      architecturalPatternOther === ""
+    ) {
+      toast.error("Select Architectural Other Pattern", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (dcisPresence === "Present" && necrosis === "") {
+      toast.error("Select Necrosis", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (dcisPresence === "Present" && numBlocksDCIS === "") {
+      toast.error("Enter Number of Blocks with DCIS", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (dcisPresence === "Present" && numBlocksExamined === "") {
+      toast.error("Enter Number of Blocks Examined", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (lcisPresence === "") {
+      toast.error("Select LCIS Presence", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (microcalcifications === "") {
+      toast.error("Select Microcalcifications", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      microcalcifications === "Other" &&
+      otherMicrocalcifications === ""
+    ) {
+      toast.error("Enter Other Microcalcifications", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (invasiveCarcinomaMarginStatus === "") {
+      toast.error("Select Margin Status for Invasive Carcinoma", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      invasiveCarcinomaMarginStatus ===
+        "Margin involved by invasive carcinoma." &&
+      involvedMargin === ""
+    ) {
+      toast.error("Select Specify Involved Margin", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      invasiveCarcinomaMarginStatus ===
+        "Distance of Invasive Carcinoma from deep resected margin" &&
+      distanceFromMargin === ""
+    ) {
+      toast.error(
+        "Enter Distance of Invasive Carcinoma from deep resected margin ",
+        {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        }
+      );
+    } else if (dcisPresence === "Present" && dcisStatus === "") {
+      toast.error("Select Margin Status for DCIS", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      dcisPresence === "Present" &&
+      dcisStatus === "Margin Involved by DCIS" &&
+      dcisInvolvedMargin === ""
+    ) {
+      toast.error("Enter Specific Involved Margin for DCIS", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (pT === "") {
+      toast.error("Select pT", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (pN === "") {
+      toast.error("Select pN", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (pM === "") {
+      toast.error("Select pM", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (additionalFindings === "") {
+      toast.error("Enter Additional Findings", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (result === "") {
+      toast.error("Enter Result", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else {
+      try {
+        setSaveLoad(true);
+        const url = `${process.env.REACT_APP_ROOT_URL}/adddetails`;
+
+        const reqConfigure = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            sample_id,
+            specimenProcedure,
+            otherProcedure,
+            specimenLaterality,
+            tumorSite,
+            clockPositions,
+            distanceFromNipple,
+            histologicType,
+            otherHistologicType,
+            histologicGrade,
+            glandularDifferentiation,
+            nuclearPleomorphism,
+            mitoticRate,
+            overallGrade,
+            selectedOption,
+            customSize,
+            tumorFocality,
+            numFoci,
+            specificNumber,
+            dcisPresence,
+            dcisSize,
+            architecturalPattern,
+            architecturalPatternOther,
+            nuclearGrade,
+            necrosis,
+            numBlocksDCIS,
+            numBlocksExamined,
+            lcisPresence,
+            tumorExtent,
+            skinInvolvement,
+            skeletalMuscleInvolvement,
+            lymphovascularInvasion,
+            lymphovascularInvasionExtent,
+            microcalcifications,
+            otherMicrocalcifications,
+            breastTreatmentEffect,
+            lymphNodeTreatmentEffect,
+            invasiveCarcinomaMarginStatus,
+            involvedMargin,
+            distanceFromMargin,
+            dcisStatus,
+            dcisInvolvedMargin,
+            totalLymphNodesExamined,
+            totalSentinelNodesExamined,
+            lymphNodesInvolved,
+            selectedMetastasisType,
+            largestMetastaticDepositSize,
+            extranodalExtension,
+            extranodalExtensionSize,
+            distantSite,
+            distantSiteOptions,
+            otherDistantSiteInput,
+            pT,
+            pN,
+            pM,
+            additionalFindings,
+            result,
+            notes,
+          }),
+        };
+        const response = await fetch(url, reqConfigure);
+
+        if (response.ok) {
+          setSaveLoad(false);
+          toast.success("Saved Successfully", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+          getData();
+        }
+      } catch (error) {
+        toast.error(`${error}`, {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      }
+    }
+  };
+
+  const editData = async () => {
+    if (specimenProcedure === "") {
+      toast.error("Select Procedure", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (specimenProcedure === "Other" && otherProcedure === "") {
+      toast.error("Enter Other Procedure", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (specimenLaterality === "") {
+      toast.error("Select Specimen Laterality", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (tumorSite === "") {
+      toast.error("Select Tumor Site", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (tumorSite === "Clock position" && !clockPositions.length > 0) {
+      toast.error("Select Atleast One Clock Position", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      tumorSite === "Distance from Nipple Areola Complex" &&
+      distanceFromNipple === ""
+    ) {
+      toast.error("Enter Distance from Nipple Areola Complex", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (selectedOption === "") {
+      toast.error("Select Tumor Size", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      selectedOption === "Other" &&
+      (customSize.height === "" ||
+        customSize.length === "" ||
+        customSize.width === "")
+    ) {
+      toast.error("Enter the Tumor Sizes", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (tumorFocality === "") {
+      toast.error("Select Tumor Focality", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      tumorFocality === "Multiple foci of invasive carcinoma" &&
+      numFoci === ""
+    ) {
+      toast.error("Select Specific number of Foci", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      tumorFocality === "Multiple foci of  invasive carcinoma" &&
+      numFoci === "Specific number" &&
+      specificNumber === ""
+    ) {
+      toast.error("Enter Specific number", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (tumorExtent === "") {
+      toast.error("Select Tumor Extent", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      tumorExtent === "Skin is present and involved" &&
+      skinInvolvement === ""
+    ) {
+      toast.error("Select Skin Involvment", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      tumorExtent === "Skeletal muscle is present and involved" &&
+      skeletalMuscleInvolvement === ""
+    ) {
+      toast.error("Select Skeletal Muscle Involvment", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (lymphovascularInvasion === "") {
+      toast.error("Select Lymphovascular Invasion", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      lymphovascularInvasion === "Present" &&
+      lymphovascularInvasionExtent === ""
+    ) {
+      toast.error("Select Lymphovascular Invasion Extent", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (breastTreatmentEffect === "") {
+      toast.error("Select Treatment Effect in the Breast", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (lymphNodeTreatmentEffect === "") {
+      toast.error("Select Treatment Effect in the Lymph Nodes", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (totalLymphNodesExamined === "") {
+      toast.error("Enter Total Number of Lymph Nodes Examined", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (totalSentinelNodesExamined === "") {
+      toast.error("Enter Total Number of Sentinel Nodes Examined", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (lymphNodesInvolved === "") {
+      toast.error("Select Lymphnodes Involved", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (lymphNodesInvolved === "Yes" && selectedMetastasisType === "") {
+      toast.error("Select Select Metastasis Type", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      lymphNodesInvolved === "Yes" &&
+      selectedMetastasisType === "Size of Largest Nodal Metastatic Deposit" &&
+      largestMetastaticDepositSize === ""
+    ) {
+      toast.error("Enter Size of Largest Nodal Metastatic Deposit", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      lymphNodesInvolved === "Yes" &&
+      selectedMetastasisType === "Extranodal Extension" &&
+      extranodalExtension === ""
+    ) {
+      toast.error("Select Extranodal Extension", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      lymphNodesInvolved === "Yes" &&
+      selectedMetastasisType === "Extranodal Extension" &&
+      extranodalExtension === "Present" &&
+      extranodalExtensionSize === ""
+    ) {
+      toast.error("Select Extranodal Extension Size", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (distantSite === "") {
+      toast.error("Select Distant Site", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      distantSite === "Present" &&
+      distantSiteOptions.Liver === false &&
+      distantSiteOptions.Bone === false &&
+      distantSiteOptions.Brain === false &&
+      distantSiteOptions.Lung === false &&
+      distantSiteOptions.Other === false
+    ) {
+      toast.error("Select Atleast Distant Site Options", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      distantSite === "Present" &&
+      distantSiteOptions.Other === true &&
+      otherDistantSiteInput === ""
+    ) {
+      toast.error("Enter Other Distant Site", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (histologicType === "") {
+      toast.error("Select Histologic Type", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (histologicType === "Other" && otherHistologicType === "") {
+      toast.error("Enter Other Histologic Type", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (histologicGrade === "") {
+      toast.error("Select Histologic Grade", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (histologicGrade === "Applicable" && nuclearPleomorphism === "") {
+      toast.error("Select Nuclear Pleomorphism", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (histologicGrade === "Applicable" && mitoticRate === "") {
+      toast.error("Select Mitotic Rate", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (histologicGrade === "Applicable" && overallGrade === "") {
+      toast.error("Select Overall Grade", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (dcisPresence === "") {
+      toast.error("Select DCIS Presence", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      dcisPresence === "Present" &&
+      (dcisSize.x === "" || dcisSize.y === "")
+    ) {
+      toast.error("Enter DCIS Sizes", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (dcisPresence === "Present" && architecturalPattern === "") {
+      toast.error("Select Architectural Patterns", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      dcisPresence === "Present" &&
+      architecturalPattern === "Other" &&
+      architecturalPatternOther === ""
+    ) {
+      toast.error("Select Architectural Other Pattern", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (dcisPresence === "Present" && necrosis === "") {
+      toast.error("Select Necrosis", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (dcisPresence === "Present" && numBlocksDCIS === "") {
+      toast.error("Enter Number of Blocks with DCIS", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (dcisPresence === "Present" && numBlocksExamined === "") {
+      toast.error("Enter Number of Blocks Examined", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (lcisPresence === "") {
+      toast.error("Select LCIS Presence", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (microcalcifications === "") {
+      toast.error("Select Microcalcifications", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      microcalcifications === "Other" &&
+      otherMicrocalcifications === ""
+    ) {
+      toast.error("Enter Other Microcalcifications", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (invasiveCarcinomaMarginStatus === "") {
+      toast.error("Select Margin Status for Invasive Carcinoma", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      invasiveCarcinomaMarginStatus ===
+        "Margin involved by invasive carcinoma." &&
+      involvedMargin === ""
+    ) {
+      toast.error("Select Specify Involved Margin", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      invasiveCarcinomaMarginStatus ===
+        "Distance of Invasive Carcinoma from deep resected margin" &&
+      distanceFromMargin === ""
+    ) {
+      toast.error(
+        "Enter Distance of Invasive Carcinoma from deep resected margin ",
+        {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        }
+      );
+    } else if (dcisPresence === "Present" && dcisStatus === "") {
+      toast.error("Select Margin Status for DCIS", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (
+      dcisPresence === "Present" &&
+      dcisStatus === "Margin Involved by DCIS" &&
+      dcisInvolvedMargin === ""
+    ) {
+      toast.error("Enter Specific Involved Margin for DCIS", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (pT === "") {
+      toast.error("Select pT", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (pN === "") {
+      toast.error("Select pN", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (pM === "") {
+      toast.error("Select pM", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (additionalFindings === "") {
+      toast.error("Enter Additional Findings", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (result === "") {
+      toast.error("Enter Result", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else {
+      try {
+        setSaveLoad(true);
+        const url = `${process.env.REACT_APP_ROOT_URL}/updatedetails/${sample_id}`;
+
+        const reqConfigure = {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            sample_id,
+            specimenProcedure,
+            otherProcedure,
+            specimenLaterality,
+            tumorSite,
+            clockPositions,
+            distanceFromNipple,
+            histologicType,
+            otherHistologicType,
+            histologicGrade,
+            glandularDifferentiation,
+            nuclearPleomorphism,
+            mitoticRate,
+            overallGrade,
+            selectedOption,
+            customSize,
+            tumorFocality,
+            numFoci,
+            specificNumber,
+            dcisPresence,
+            dcisSize,
+            architecturalPattern,
+            architecturalPatternOther,
+            nuclearGrade,
+            necrosis,
+            numBlocksDCIS,
+            numBlocksExamined,
+            lcisPresence,
+            tumorExtent,
+            skinInvolvement,
+            skeletalMuscleInvolvement,
+            lymphovascularInvasion,
+            lymphovascularInvasionExtent,
+            microcalcifications,
+            otherMicrocalcifications,
+            breastTreatmentEffect,
+            lymphNodeTreatmentEffect,
+            invasiveCarcinomaMarginStatus,
+            involvedMargin,
+            distanceFromMargin,
+            dcisStatus,
+            dcisInvolvedMargin,
+            totalLymphNodesExamined,
+            totalSentinelNodesExamined,
+            lymphNodesInvolved,
+            selectedMetastasisType,
+            largestMetastaticDepositSize,
+            extranodalExtension,
+            extranodalExtensionSize,
+            distantSite,
+            distantSiteOptions,
+            otherDistantSiteInput,
+            pT,
+            pN,
+            pM,
+            additionalFindings,
+            result,
+            notes,
+          }),
+        };
+        const response = await fetch(url, reqConfigure);
+
+        if (response.ok) {
+          setSaveLoad(false);
+
+          toast.success("Updated Successfully", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+          getData();
+        }
+      } catch (error) {
+        toast.error(`${error}`, {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      }
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const [showEdit, setShowEdit] = useState(false);
+
+  const getData = async () => {
+    const url = `${process.env.REACT_APP_ROOT_URL}/getalldetails?sample_id=${sample_id}`;
+
+    const res = await axios.get(url);
+
+    if (res.status === 200) {
+      res.data.length === 0 ? setShowEdit(true) : setShowEdit(false);
+    }
+
+    if (res.data.length !== 0) {
+      if (res.status === 200) {
+        res.data[0].specimenProcedure !== undefined &&
+          setSpecimenProcedure(res.data[0].specimenProcedure);
+
+        res.data[0].otherProcedure !== undefined &&
+          setOtherProcedure(res.data[0].otherProcedure);
+        res.data[0].specimenLaterality !== undefined &&
+          setSpecimenLaterality(res.data[0].specimenLaterality);
+        res.data[0].tumorSite !== undefined &&
+          setTumorSite(res.data[0].tumorSite);
+
+        res.data[0].clockPositions !== undefined &&
+          setClockPositions(res.data[0].clockPositions);
+        res.data[0].distanceFromNipple !== undefined &&
+          setDistanceFromNipple(res.data[0].distanceFromNipple);
+        res.data[0].histologicType !== undefined &&
+          setHistologicType(res.data[0].histologicType);
+        res.data[0].otherHistologicType !== undefined &&
+          setOtherHistologicType(res.data[0].otherHistologicType);
+        res.data[0].histologicGrade !== undefined &&
+          setHistologicGrade(res.data[0].histologicGrade);
+        res.data[0].glandularDifferentiation !== undefined &&
+          setGlandularDifferentiation(res.data[0].glandularDifferentiation);
+        res.data[0].nuclearPleomorphism !== undefined &&
+          setNuclearPleomorphism(res.data[0].nuclearP);
+        res.data[0].mitoticRate !== undefined &&
+          setMitoticRate(res.data[0].mitoticRate);
+        res.overallGrade !== undefined &&
+          setOverallGrade(res.data[0].overallGrade);
+        res.data[0].selectedOption !== undefined &&
+          setSelectedOption(res.data[0].selectedOption);
+        res.data[0].customSize !== undefined &&
+          setCustomSize(res.data[0].customSize);
+        res.data[0].tumorFocality !== undefined &&
+          setTumorFocality(res.data[0].tumorFocality);
+        res.data[0].numFoci !== undefined && setNumFoci(res.data[0].numFoci);
+        res.data[0].specificNumber !== undefined &&
+          setSpecificNumber(res.data[0].specificNumber);
+        res.data[0].dcisPresence !== undefined &&
+          setDcisPresence(res.data[0].dcisPresence);
+        res.data[0].dcisSize !== undefined && setDcisSize(res.data[0].dcisSize);
+        res.data[0].architecturalPattern !== undefined &&
+          setArchitecturalPattern(res.data[0].architecturalPattern);
+        res.data[0].architecturalPatternOther !== undefined &&
+          setArchitecturalPatternOther(res.data[0].architecturalPatternOther);
+        res.data[0].nuclearGrade !== undefined &&
+          setNuclearGrade(res.data[0].nuclearGrade);
+        res.data[0].necrosis !== undefined && setNecrosis(res.data[0].necrosis);
+        res.data[0].numBlocksDCIS !== undefined &&
+          setNumBlocksDCIS(res.data[0].numBlocksDCIS);
+        res.data[0].numBlocksExamined !== undefined &&
+          setNumBlocksExamined(res.data[0].numBlocksExamined);
+        res.data[0].lcisPresence !== undefined &&
+          setLcisPresence(res.data[0].licsPresence);
+        res.data[0].tumorExtent !== undefined &&
+          setTumorExtent(res.data[0].tumorExtent);
+        res.data[0].skinInvolvement !== undefined &&
+          setSkinInvolvement(res.data[0].skinInvolvement);
+        res.data[0].skeletalMuscleInvolvement !== undefined &&
+          setSkeletalMuscleInvolvement(res.data[0].skeletalMuscleInvolvement);
+        res.data[0].lymphovascularInvasion !== undefined &&
+          setLymphovascularInvasion(res.data[0].lymphovascularInvasion);
+        res.data[0].lymphovascularInvasionExtent !== undefined &&
+          setLymphovascularInvasionExtent(
+            res.data[0].lymphovascularInvasionExtent
+          );
+        res.data[0].microcalcifications !== undefined &&
+          setMicrocalcifications(res.data[0].microcalcifications);
+        res.data[0].otherMicrocalcifications !== undefined &&
+          setOtherMicrocalcifications(res.data[0].otherMicrocalcifications);
+        res.data[0].breastTreatmentEffect !== undefined &&
+          setBreastTreatmentEffect(res.data[0].breastTreatmentEffect);
+        res.data[0].lymphNodeTreatmentEffect !== undefined &&
+          setLymphNodeTreatmentEffect(res.data[0].lymphNodeTreatmentEffect);
+        res.data[0].invasiveCarcinomaMarginStatus !== undefined &&
+          setInvasiveCarcinomaMarginStatus(
+            res.data[0].invasiveCarcinomaMarginStatus
+          );
+        res.data[0].involvedMargin !== undefined &&
+          setInvolvedMargin(res.data[0].involvedMargin);
+        res.data[0].distanceFromMargin !== undefined &&
+          setDistanceFromMargin(res.data[0].distanceFromMargin);
+        res.data[0].dcisStatus !== undefined &&
+          setDcisStatus(res.data[0].dcisStatus);
+        res.data[0].dcisInvolvedMargin !== undefined &&
+          setDcisInvolvedMargin(res.data[0].dcisInvolvedMargin);
+        res.data[0].totalLymphNodesExamined !== undefined &&
+          setTotalLymphNodesExamined(res.data[0].totalLymphNodesExamined);
+        res.data[0].totalSentinelNodesExamined !== undefined &&
+          setTotalSentinelNodesExamined(res.data[0].totalSentinelNodesExamined);
+        res.data[0].lymphNodesInvolved !== undefined &&
+          setLymphNodesInvolved(res.data[0].lymphNodesInvolved);
+        res.data[0].selectedMetastasisType !== undefined &&
+          setSelectedMetastasisType(res.data[0].selectedMetastasisType);
+        res.data[0].largestMetastaticDepositSize !== undefined &&
+          setLargestMetastaticDepositSize(
+            res.data[0].setLargestMetastaticDepositSize
+          );
+        res.data[0].extranodalExtension !== undefined &&
+          setExtranodalExtension(res.data[0].extranodalExtension);
+        res.data[0].extranodalExtensionSize !== undefined &&
+          setExtranodalExtensionSize(res.data[0].extranodalExtensionSize);
+        res.data[0].distantSite !== undefined &&
+          setDistantSite(res.data[0].distantSite);
+        res.data[0].distantSiteOptions !== undefined &&
+          setDistantSiteOptions(res.data[0].distantSiteOptions);
+        res.data[0].otherDistantSiteInput !== undefined &&
+          setOtherDistantSiteInput(res.data[0].otherDistantSiteInput);
+        res.data[0].pT !== undefined && setPT(res.data[0].pT);
+        res.data[0].pN !== undefined && setPN(res.data[0].pN);
+        res.data[0].pM !== undefined && setPM(res.data[0].pM);
+        res.data[0].additionalFindings !== undefined &&
+          setAdditionalFindings(res.data[0].additionalFindings);
+        res.data[0].result !== undefined && setResult(res.data[0].result);
+        res.data[0].notes !== undefined && setNotes(res.data[0].notes);
+      }
+    }
   };
 
   return !load ? (
@@ -1320,6 +3665,14 @@ const Dox = () => {
                     )}
                   </div>
                 )}
+                <h2>Notes</h2>
+                <textarea
+                  rows="10"
+                  cols="5"
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value)}
+                  required
+                ></textarea>
               </div>
             </div>
             <div className="form-column">
@@ -1981,6 +4334,19 @@ const Dox = () => {
           <button className="next-button" onClick={handleNextPageClick}>
             Next Page
           </button>
+          {!saveLoad ? (
+            showEdit ? (
+              <button onClick={saveData} className="next-button">
+                Save
+              </button>
+            ) : (
+              <button onClick={editData} className="next-button">
+                Edit
+              </button>
+            )
+          ) : (
+            <button className="next-button">.&nbsp;.&nbsp;.</button>
+          )}
         </div>
       )}
     </div>
